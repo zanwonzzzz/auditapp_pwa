@@ -101,7 +101,7 @@ function Iniciar_Traslado()
     fecha_Traslado.value = `${yyyy}-${mm}-${dd} ${hh}:${min}:${ss}`
 
     http.put(`/no/existe/${foliopisa}`, {
-        Inicio_Traslado: fecha_Traslado,
+        Inicio_Traslado: fecha_Traslado.value,
     })
     .then(function (response) {
         alert('traslado iniciado')

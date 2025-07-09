@@ -3,7 +3,7 @@
     <div class="login-box">
       <img id="imagen" src="../assets/auditap.png" alt="auditapp" class="logo-img">
       <router-link to="/ordenes">Ordenes</router-link> 
-      <button class="apartado">Cerrar</button>
+      <button  @click="logout"       class="apartado">Cerrar</button>
       <button class="apartado">ultimo</button>
     </div>
   </div>
@@ -78,6 +78,9 @@
 import { RouterLink } from 'vue-router';
 import { onMounted } from 'vue';
 import http from '../api/apiService';
+import { useRouter } from 'vue-router';
+
+const router = useRouter()
 
   onMounted(async () => {
     http.post('/auditor', {
@@ -91,4 +94,14 @@ import http from '../api/apiService';
         console.log(error);
     });
     })
+
+    function logout(){ http.get('/logout')
+    .then(function (response) {
+        localStorage.clear('token')
+        router.back()
+    })
+    .catch(function (error) {
+        console.log(error);
+    });
+    }
 </script>

@@ -20,5 +20,5 @@ http.interceptors.request.use(config => {
     return router.push('/login')
 })
 
-
+//clase para poner todas las rutas y solo usarlas en los demas archivos aaa y destruir los componentes
 export default http
