@@ -1,4 +1,8 @@
 <template>
+    <label for="">Copes</label>
+    <select name="" id="sltCope">
+        <option value="">Selecciona el Cope</option>
+    </select>
   <div class="main-bg">
     <div class="ordenes-grid">
       <div v-for="(d,index) in data" :key="d[0]" class="orden-card" v-show="(pag - 1) * NUM_RESULTS <= index  && pag * NUM_RESULTS > index">
@@ -36,7 +40,7 @@
 .main-bg {
   min-height: 100vh;
   width: 100vw;
-  background: #f8f9fa;
+  background: #202a35;
   display: flex;
   align-items: flex-start;
   justify-content: center;
@@ -112,12 +116,21 @@ const pag = 1
 
   onMounted(async () => {
     const router = useRouter()
-    http.get('/pendientes/53')
+    /* http.get('/pendientes/53')
       .then((response) => {
        console.log(response)
        data.value = response.data.Ordenes_Pendientes
       })
-      .catch(err => console.error(err))
+      .catch(err => console.error(err)) */
+      //checar pq no jala asi 
+        http.all([
+        http.get('/pendientes/53'),
+        http.get('/copes')
+        ]).then(http.spread((respuesta1, respuesta2) => {
+            data.value = respuesta1.data.Ordenes_Pendientes
+            console.log(respuesta2)
+        }));
   })
+
 
 </script>
