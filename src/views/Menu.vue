@@ -1,7 +1,7 @@
 <template>
   <div class="main-bg">
     <div class="login-box">
-      <img id="imagen" src="" alt="auditapp" class="logo-img">
+      <img id="imagen" src="../assets/auditap.png" alt="auditapp" class="logo-img">
       <router-link to="/ordenes">Ordenes</router-link> 
       <button class="apartado">Cerrar</button>
       <button class="apartado">ultimo</button>
@@ -76,4 +76,19 @@
 </style>
 <script setup>
 import { RouterLink } from 'vue-router';
+import { onMounted } from 'vue';
+import http from '../api/apiService';
+
+  onMounted(async () => {
+    http.post('/auditor', {
+        user: localStorage.getItem('user'),
+    })
+    .then(function (response) {
+        console.log(response);
+        localStorage.setItem('idAuditor',response.data)
+    })
+    .catch(function (error) {
+        console.log(error);
+    });
+    })
 </script>

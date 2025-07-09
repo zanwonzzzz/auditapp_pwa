@@ -14,6 +14,10 @@ const routes = [
     path: "/ordenes",
     component: () => import('../views/Ordenes.vue')
   },
+   {
+    path: "/traslado/:foliopisa",
+    component: () => import('../views/Iniciar_Traslado.vue')
+  },
 ];
 //createWebHistory se utiliza para manejar la navegación en aplicaciones Vue 3 con URLs limpias 
 const router = createRouter({

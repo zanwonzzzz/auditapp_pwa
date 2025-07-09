@@ -12,7 +12,7 @@
           <span class="orden-label">Terminal  {{ d[1] }}</span>
           <span class="orden-label">Puerto  {{ d[2] }}</span>
         </div>
-        <div class="orden-number"><button></button> <button></button> <button></button></div>
+        <div class="orden-number"><button @click="Traslado(d)"></button> <button></button> <button></button></div>
         <div class="orden-info">
           <div>{{ d[5] }}</div>
           <div>{{ d[11] }}</div>
@@ -106,31 +106,34 @@
 <script setup>
 //cambiar esto al de options
 import http from '../api/apiService'
-import { useRouter } from 'vue-router'
+import { useRouter,useRoute } from 'vue-router'
 import { onMounted } from 'vue'
 import { ref } from 'vue'
 
+const router = useRouter()
 const data = ref([])
 const NUM_RESULTS = 10
 const pag = 1
 
   onMounted(async () => {
     const router = useRouter()
-    /* http.get('/pendientes/53')
+    let idAuditor = localStorage.getItem('idAuditor')
+    http.get(`/pendientes/${idAuditor}`)
       .then((response) => {
        console.log(response)
        data.value = response.data.Ordenes_Pendientes
       })
-      .catch(err => console.error(err)) */
-      //checar pq no jala asi 
-        http.all([
-        http.get('/pendientes/53'),
-        http.get('/copes')
-        ]).then(http.spread((respuesta1, respuesta2) => {
-            data.value = respuesta1.data.Ordenes_Pendientes
-            console.log(respuesta2)
-        }));
-  })
+      .catch(err => console.error(err)) 
+    })
+
+
+    function Traslado(d)
+    {
+        localStorage.setItem('longitud',d[8])
+        localStorage.setItem('latitud',d[9])
+        let foliopisa = d[0]
+        router.push(`/traslado/${foliopisa}`)
+    }
 
 
 </script>
