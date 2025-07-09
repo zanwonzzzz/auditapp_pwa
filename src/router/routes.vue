@@ -10,6 +10,10 @@ const routes = [
     path: "/menu",
     component: () => import('../views/Menu.vue')
   },
+  {
+    path: "/ordenes",
+    component: () => import('../views/Ordenes.vue')
+  },
 ];
 //createWebHistory se utiliza para manejar la navegación en aplicaciones Vue 3 con URLs limpias 
 const router = createRouter({

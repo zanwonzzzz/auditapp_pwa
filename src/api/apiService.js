@@ -19,3 +19,6 @@ http.interceptors.request.use(config => {
 
     return router.push('/login')
 })
+
+
+export default http

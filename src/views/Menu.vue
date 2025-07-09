@@ -2,7 +2,7 @@
   <div class="main-bg">
     <div class="login-box">
       <img id="imagen" src="" alt="auditapp" class="logo-img">
-      <button class="apartado">Ordnes</button>
+      <router-link to="/ordenes">Ordenes</router-link> 
       <button class="apartado">Cerrar</button>
       <button class="apartado">ultimo</button>
     </div>
@@ -75,4 +75,5 @@
 }
 </style>
 <script setup>
+import { RouterLink } from 'vue-router';
 </script>
