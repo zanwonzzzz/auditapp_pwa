@@ -84,8 +84,9 @@ function OnSubmit() {
   })
   .then(function (response) {
     console.log(response);
-    localStorage.setItem('token',response.data)
-    localStorage.setItem('user',JSON.stringify(usuario.value))
+    localStorage.setItem('token',response.data.token)
+    localStorage.setItem('user',response.data.user.idAuditor)
+    localStorage.setItem('username',response.data.user.user)
     //ROUTER PUSH ES PARA NAVEGAR ENTRE RUTAS Y ROUTER GO ES PARA COMO REGRESARSE
     router.push('/menu');
   })

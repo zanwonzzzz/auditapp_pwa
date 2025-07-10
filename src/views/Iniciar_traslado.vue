@@ -71,7 +71,7 @@
 //ref e para crear baraibles reactivas
 import { ref, onMounted } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
-import http from '../api/apiService'
+import apiService from '../api/apiService'
 
 const route = useRoute()
 const router = useRouter()
@@ -100,15 +100,7 @@ function Iniciar_Traslado()
     const ss = String(now.getSeconds()).padStart(2, '0')
     fecha_Traslado.value = `${yyyy}-${mm}-${dd} ${hh}:${min}:${ss}`
 
-    http.put(`/no/existe/${foliopisa}`, {
-        Inicio_Traslado: fecha_Traslado.value,
-    })
-    .then(function (response) {
-        alert('traslado iniciado')
-    })
-    .catch(function (error) {
-        console.log(error);
-    });
+    const traslado = await apiService.Inserts(foliopisa,fecha_Traslado.value)
 
 }
 

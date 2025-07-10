@@ -1,7 +1,12 @@
 <template>
+    <navbar></navbar>
     <label for="">Copes</label>
     <select name="" id="sltCope">
         <option value="">Selecciona el Cope</option>
+    </select>
+    <label for="">Distritos</label>
+    <select name="" id="sltDistrito">
+        <option value="">Selecciona el Distrito</option>
     </select>
   <div class="main-bg">
     <div class="ordenes-grid">
@@ -12,7 +17,7 @@
           <span class="orden-label">Terminal  {{ d[1] }}</span>
           <span class="orden-label">Puerto  {{ d[2] }}</span>
         </div>
-        <div class="orden-number"><button @click="Traslado(d)"></button> <button></button> <button></button></div>
+        <div class="orden-number"><button @click="Traslado(d)"></button> <button @click="IniciarAuditoria(d)"></button> <button></button></div>
         <div class="orden-info">
           <div>{{ d[5] }}</div>
           <div>{{ d[11] }}</div>
@@ -105,25 +110,25 @@
 </style>
 <script setup>
 //cambiar esto al de options
-import http from '../api/apiService'
+import apiService from '../api/apiService'
 import { useRouter,useRoute } from 'vue-router'
 import { onMounted } from 'vue'
 import { ref } from 'vue'
+import navbar from '../components/navbar.vue'
+import { RouterLink } from 'vue-router'
 
 const router = useRouter()
-const data = ref([])
+const data = ref([]) 
 const NUM_RESULTS = 10
 const pag = 1
+let foliopisa = null
 
+//CONSULTAR LAS ORDENES SOLO UNA BES Y GUARDARLAS EN CACHE Y Q SOLO CON EL POLLINGSE ACTUALISE
   onMounted(async () => {
-    const router = useRouter()
-    let idAuditor = localStorage.getItem('idAuditor')
-    http.get(`/pendientes/${idAuditor}`)
-      .then((response) => {
-       console.log(response)
-       data.value = response.data.Ordenes_Pendientes
-      })
-      .catch(err => console.error(err)) 
+     const router = useRouter()
+     const user = localStorage.getItem('user')
+     const ordenes = await apiService.ordenesPendientes(user)
+     data.value = ordenes.data.Ordenes_Pendientes
     })
 
 
@@ -131,9 +136,13 @@ const pag = 1
     {
         localStorage.setItem('longitud',d[8])
         localStorage.setItem('latitud',d[9])
-        let foliopisa = d[0]
+        foliopisa = d[0]
         router.push(`/traslado/${foliopisa}`)
     }
+
+    function IniciarAuditoria(d){foliopisa=d[0]  
+        router.push(`/detalle/${foliopisa}`)}
+    
 
 
 </script>
