@@ -116,7 +116,7 @@ import { onMounted } from 'vue'
 import { ref } from 'vue'
 import navbar from '../components/navbar.vue'
 import { RouterLink } from 'vue-router'
-
+import authService from '../api/authService'
 const router = useRouter()
 const data = ref([]) 
 const NUM_RESULTS = 10
@@ -126,8 +126,8 @@ let foliopisa = null
 //CONSULTAR LAS ORDENES SOLO UNA BES Y GUARDARLAS EN CACHE Y Q SOLO CON EL POLLINGSE ACTUALISE
   onMounted(async () => {
      const router = useRouter()
-     const user = localStorage.getItem('user')
-     const ordenes = await apiService.ordenesPendientes(user)
+      const idAuditor = await authService.getIdAuditor()
+     const ordenes = await apiService.ordenesPendientes(idAuditor)
      data.value = ordenes.data.Ordenes_Pendientes
     })
 

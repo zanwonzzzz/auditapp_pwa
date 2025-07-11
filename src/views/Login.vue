@@ -85,13 +85,12 @@ function OnSubmit() {
   .then(function (response) {
     console.log(response);
     localStorage.setItem('token',response.data.token)
-    localStorage.setItem('user',response.data.user.idAuditor)
-    localStorage.setItem('username',response.data.user.user)
-    //ROUTER PUSH ES PARA NAVEGAR ENTRE RUTAS Y ROUTER GO ES PARA COMO REGRESARSE
+    
     router.push('/menu');
   })
   .catch(function (error) {
     console.log(error);
   });
 }
+//ROUTER PUSH ES PARA NAVEGAR ENTRE RUTAS Y ROUTER GO ES PARA COMO REGRESARSE
 </script>

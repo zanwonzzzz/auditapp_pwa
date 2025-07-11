@@ -21,13 +21,16 @@
 <script setup>
 import { RouterLink,useRouter } from 'vue-router';
 import { onMounted, ref } from 'vue';
+import authService from '../api/authService';
 
 const router = useRouter()
 const username = ref()
 function regresar(){router.back()}
 function logout(){router.push('/')}
 
-onMounted(() => {
-    username.value = localStorage.getItem('username')
+onMounted(async () => {
+    const nombre_Auditor = await authService.getUserAuditor()
+    console.log(nombre_Auditor)
+    username.value = nombre_Auditor
 })
 </script>

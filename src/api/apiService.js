@@ -24,7 +24,6 @@ http.interceptors.request.use(config => {
 //decodifica el token en ves ed guardar cada cosa en el localstorage
 class apiService 
 {
-    logout(){return http.get('/logout')}
 
     ordenesPendientes(fk_auditor){return http.get(`/pendientes/${fk_auditor}`)}
 
