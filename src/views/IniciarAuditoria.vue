@@ -94,6 +94,7 @@ const route = useRoute()
 const foliopisa = route.params.foliopisa
 const ruta = "https://vps.ed-intra.com/API/imagesCordiapp/"
 
+
  onMounted(async () => {
     const detalle = await apiService.DetalleOrdenes(foliopisa)
     data.value = detalle.data.Detalle_Orden

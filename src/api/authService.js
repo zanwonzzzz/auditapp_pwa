@@ -31,7 +31,6 @@ class AuthService
 
         return user
     }
-     
 }
 //estaba devolviendo la clase como tal y no una instancia
 export default new AuthService();

@@ -3,7 +3,7 @@
     <button @click="Mostrarse">Avanzar</button>
 </template>
 <script setup>
-import { defineEmits, ref } from 'vue';
+import { ref } from 'vue';
 
 const emit = defineEmits(['mostrarse'])
 const bandera = ref(true)
