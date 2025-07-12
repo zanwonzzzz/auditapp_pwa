@@ -20,7 +20,7 @@
         <img :src="`${ruta}/foto_puerto/${foliopisa}.jpg`" alt="">
         <img :src="`${ruta}/foto_INE/${foliopisa}.jpg`" alt="">
         <!--avansar-->
-        <Avanzar v-if="banderita" @mostrarse="(avanzar,false)"></Avanzar>
+        <Avanzar v-if="banderita" @mostrarse="avanzar"></Avanzar>
         <Pasos v-if="!banderita"></Pasos>
     </div>
   </div>
@@ -89,7 +89,7 @@ import Avanzar from '../components/Avanzar.vue';
 import Pasos from '../components/Pasos.vue';
 
 const data = ref([])
-var banderita = ref(true)
+const banderita = ref(true)
 const route = useRoute()
 const foliopisa = route.params.foliopisa
 const ruta = "https://vps.ed-intra.com/API/imagesCordiapp/"
@@ -102,7 +102,7 @@ const ruta = "https://vps.ed-intra.com/API/imagesCordiapp/"
 
  function avanzar(banderita)
  {
-   console.log(banderita)
+   banderita.value = false 
  }
 
 </script>
