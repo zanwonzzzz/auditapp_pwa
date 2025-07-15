@@ -2,9 +2,17 @@
   <div class="main-bg">
     <div class="login-box">
       <img id="imagen" src="../assets/auditap.png" alt="auditapp" class="logo-img">
-      <router-link to="/ordenes">Ordenes</router-link> 
-      <button  @click="logout" class="apartado">Cerrar</button>
-      <button class="apartado">ultimo</button>
+      <div class="menu-buttons">
+        <router-link to="/ordenes" class="apartado">
+          <font-awesome-icon :icon="['fas', 'suitcase']" />
+        </router-link>
+        <button @click="logout" class="apartado">
+          <font-awesome-icon :icon="['fas', 'power-off']" />
+        </button>
+        <button class="apartado">
+          <font-awesome-icon :icon="['fas', 'user-gear']" />
+        </button>
+      </div>
     </div>
   </div>
 </template>
@@ -30,15 +38,34 @@
   min-width: 350px;
 }
 
+.menu-buttons {
+  display: flex;
+  flex-direction: row;
+  gap: 16px;
+  margin-top: 16px;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
 .apartado {
   background: #2f6ab8;
-  padding: 10px 10px;
+  padding: 10px 18px;
   border-radius: 10px;
   box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.37);
   display: flex;
-  flex-direction: column;
   align-items: center;
-  min-width: 3px;
+  gap: 8px;
+  color: #fff;
+  font-size: 1.1rem;
+  border: none;
+  cursor: pointer;
+  min-width: 80px;
+  transition: background 0.2s;
+  text-decoration: none;
+}
+
+.apartado:hover {
+  background: #1d4e89;
 }
 
 .logo-img {
@@ -46,37 +73,31 @@
   margin-bottom: 24px;
 }
 
-.login-input {
-  width: 90%;
-  padding: 10px 16px;
-  margin-bottom: 24px;
-  border-radius: 8px;
-  border: none;
-  font-size: 1.1rem;
-  outline: none;
-  box-shadow: 0 2px 8px rgba(0,0,0,0.08);
-}
-
-.login-btn {
-  width: 50%;
-  padding: 10px 0;
-  background: transparent;
-  color: #fff;
-  border: 2px solid #fff;
-  border-radius: 8px;
-  font-size: 1.1rem;
-  cursor: pointer;
-  transition: background 0.2s, color 0.2s;
-}
-
-.login-btn:hover {
-  background: #fff;
-  color: #23262a;
+@media (max-width: 600px) {
+  .login-box {
+    min-width: 0;
+    width: 95vw;
+    padding: 24px 8px;
+  }
+  .menu-buttons {
+    flex-direction: column;
+    gap: 12px;
+    width: 100%;
+  }
+  .apartado {
+    width: 100%;
+    justify-content: center;
+  }
 }
 </style>
 <script setup>
 import { RouterLink } from 'vue-router';
 import { useRouter } from 'vue-router';
+import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
+import { library } from '@fortawesome/fontawesome-svg-core';
+import { faSuitcase, faPowerOff, faUserGear } from '@fortawesome/free-solid-svg-icons';
+
+library.add(faSuitcase, faPowerOff, faUserGear);
 
 const router = useRouter()
 
