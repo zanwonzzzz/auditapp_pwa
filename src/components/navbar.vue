@@ -37,14 +37,25 @@ onMounted(async () => {
 </script>
 
 <style scoped>
+* {
+  box-sizing: border-box;
+}
+
 .navbar-custom {
-  width: 100vw;
+  width: 100%;
   background: linear-gradient(135deg, #b69298 0%, #b81933 100%);
   padding: 0.5rem 0;
   box-shadow: 0 2px 8px rgba(0,0,0,0.08);
   display: flex;
   justify-content: center;
   align-items: center;
+  box-sizing: border-box;
+  margin: 0;
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 1000;
 }
 
 .navbar-content {
@@ -52,8 +63,8 @@ onMounted(async () => {
   max-width: 1200px;
   display: flex;
   align-items: center;
-  justify-content: space-between;
   padding: 0 1rem;
+  box-sizing: border-box;
 }
 
 .navbar-logo {
@@ -66,8 +77,8 @@ onMounted(async () => {
   color: #fff;
   font-weight: 600;
   font-size: 1.1rem;
-  flex: 1;
-  text-align: left;
+  margin-left: 1rem;
+  margin-right: auto;
 }
 
 .navbar-actions {
@@ -104,6 +115,7 @@ onMounted(async () => {
     font-size: 1rem; /* Un poco más grande */
     margin-bottom: 0;
     margin-left: 0.5rem;
+    margin-right: auto;
   }
   .navbar-actions {
     width: auto;
@@ -119,6 +131,14 @@ onMounted(async () => {
     line-height: 1.2;
     background: linear-gradient(135deg, #b69298 0%, #b81933 100%) !important; /* Solo gradiente, sin fondo negro */
     box-shadow: 0 2px 8px rgba(0,0,0,0.08); /* Sombra suave, no fondo negro */
+    width: 100%;
+    box-sizing: border-box;
+    margin: 0;
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    z-index: 1000;
   }
 }
 </style>

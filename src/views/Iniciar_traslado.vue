@@ -5,11 +5,18 @@
       <label for="">Iniciando Traslado</label>
       <label for="">Orden: {{foliopisa }}</label>
       <label for="">Click para ver Ubicación</label>
-      <a
-        :href="`https://www.google.com/maps/search/?api=1&query=${latitud},${longitud}&zoom=20`"
-        target="_blank"
-      >Maps</a>
-      <button @click="Regresar">regresar</button>
+      <div class="buttons-container">
+        <a
+          :href="`https://www.google.com/maps/search/?api=1&query=${latitud},${longitud}&zoom=20`"
+          target="_blank"
+          class="map-btn"
+        >
+          <i class="fas fa-map-marker-alt"></i>
+        </a>
+        <button @click="Regresar" class="back-btn">
+          <i class="fas fa-arrow-left"></i>
+        </button>
+      </div>
     </div>
   </div>
 </template>
@@ -37,6 +44,32 @@
 .logo-img {
   width: 180px;
   margin-bottom: 24px;
+}
+
+.buttons-container {
+  display: flex;
+  gap: 16px;
+  margin-top: 16px;
+}
+
+.map-btn, .back-btn {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 16px;
+  border-radius: 8px;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: all 0.2s;
+  text-decoration: none;
+  border: 2px solid #fff;
+  background: transparent;
+  color: #fff;
+}
+
+.map-btn:hover, .back-btn:hover {
+  background: #fff;
+  color: #23262a;
 }
 
 .login-input {
