@@ -19,9 +19,10 @@
         <img :src="`${ruta}/foto_casa_cliente/${foliopisa}.jpg`" alt="">
         <img :src="`${ruta}/foto_puerto/${foliopisa}.jpg`" alt="">
         <img :src="`${ruta}/foto_INE/${foliopisa}.jpg`" alt="">
-        <!--avansar-->
-        <Avanzar v-if="banderita" @mostrarse="avanzar"></Avanzar>
-        <Pasos v-if="!banderita"></Pasos>
+        <!--CUNADO SE REGRESE DEBE DE REGRESAR AL COMPONENTE D EPASOS Y LUEGO A LOS OTROS DOS BOTONES-->
+        <button v-if="bandera">Fotos</button>
+        <button v-if="bandera" @click="avanzar(false)">Avanzar</button>
+        <Pasos v-if="!bandera" @Nav="Navegacion"></Pasos>
     </div>
   </div>
 </template>
@@ -85,12 +86,14 @@ import navbar from '../components/navbar.vue';
 import apiService from '../api/apiService';
 import { onMounted, ref } from 'vue';
 import { useRoute } from 'vue-router';
-import Avanzar from '../components/Avanzar.vue';
 import Pasos from '../components/Pasos.vue';
+import { useRouter } from 'vue-router';
 
 const data = ref([])
-const banderita = ref(true)
+const rutaRE = ref([])
+const bandera = ref(true)
 const route = useRoute()
+const router = useRouter()
 const foliopisa = route.params.foliopisa
 const ruta = "https://vps.ed-intra.com/API/imagesCordiapp/"
 
@@ -101,9 +104,13 @@ const ruta = "https://vps.ed-intra.com/API/imagesCordiapp/"
 
  })
 
- function avanzar(banderita)
+ function avanzar(valor)
  {
-   banderita.value = false 
+   bandera.value = valor
  }
+
+ function Navegacion(ruta){
+  router.push(`/${ruta}/${foliopisa}`)
+}
 
 </script>

@@ -100,7 +100,7 @@ function Iniciar_Traslado()
     const ss = String(now.getSeconds()).padStart(2, '0')
     fecha_Traslado.value = `${yyyy}-${mm}-${dd} ${hh}:${min}:${ss}`
 
-    const traslado = await apiService.Inserts(foliopisa,fecha_Traslado.value)
+    const traslado = apiService.Inserts(foliopisa,fecha_Traslado.value)
 
 }
 
