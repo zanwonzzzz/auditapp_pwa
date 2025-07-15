@@ -91,31 +91,34 @@ onMounted(async () => {
 
 @media (max-width: 600px) {
   .navbar-content {
-    flex-direction: column;
-    align-items: flex-start;
+    flex-direction: row;
+    align-items: center;
     gap: 0.5rem;
     padding: 0 0.5rem;
   }
   .navbar-logo {
-    height: 14px; /* Delgada solo en móvil */
-    margin-bottom: 0.2rem;
+    height: 28px; /* Un poco más grande */
+    margin-bottom: 0;
   }
   .navbar-username {
-    font-size: 0.65rem; /* Delgada solo en móvil */
-    margin-bottom: 0.2rem;
+    font-size: 1rem; /* Un poco más grande */
+    margin-bottom: 0;
+    margin-left: 0.5rem;
   }
   .navbar-actions {
-    width: 100%;
+    width: auto;
     justify-content: flex-end;
   }
   .icon-btn {
-    font-size: 0.9rem; /* Delgada solo en móvil */
-    padding: 0.05rem 0.1rem; /* Delgada solo en móvil */
+    font-size: 1.4rem; /* Un poco más grande */
+    padding: 0.22rem 0.5rem;
   }
   .navbar-custom {
-    padding: 0.01rem 0; /* Delgada solo en móvil */
+    padding: 0.32rem 0; /* Un poco menos delgada */
     min-height: unset;
-    line-height: 1;
+    line-height: 1.2;
+    background: linear-gradient(135deg, #b69298 0%, #b81933 100%) !important; /* Solo gradiente, sin fondo negro */
+    box-shadow: 0 2px 8px rgba(0,0,0,0.08); /* Sombra suave, no fondo negro */
   }
 }
 </style>

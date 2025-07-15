@@ -1,14 +1,18 @@
 <template>
     <navbar></navbar>
-    <div class="selects-container">
-      <label for="sltCope">Copes</label>
-      <select name="" id="sltCope">
-          <option value="">Selecciona el Cope</option>
-      </select>
-      <label for="sltDistrito">Distritos</label>
-      <select name="" id="sltDistrito">
-          <option value="">Selecciona el Distrito</option>
-      </select>
+    <div class="selects-container selects-row">
+      <div class="select-group-col">
+        <label for="sltCope">Copes</label>
+        <select name="" id="sltCope">
+            <option value="">Selecciona el Cope</option>
+        </select>
+      </div>
+      <div class="select-group-col">
+        <label for="sltDistrito">Distritos</label>
+        <select name="" id="sltDistrito">
+            <option value="">Selecciona el Distrito</option>
+        </select>
+      </div>
     </div>
     <div class="main-bg">
       <div class="ordenes-grid">
@@ -63,28 +67,37 @@ body, html {
 }
 
 .selects-container {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 20px;
-  margin: 32px auto 32px auto;
-  justify-content: center;
-  align-items: center;
-  background: #fff;
-  padding: 24px 16px 8px 16px;
-  border-radius: 12px;
-  max-width: 1200px;
+  display: flex !important;
+  flex-direction: row !important;
+  gap: 32px !important;
+  margin: 32px auto 32px auto !important;
+  justify-content: center !important;
+  align-items: flex-start !important;
+  background: #fff !important;
+  padding: 24px 16px 8px 16px !important;
+  border-radius: 12px !important;
+  max-width: 1200px !important;
+  /* border: 2px dashed #b81933;  Eliminado el borde */
 }
-.selects-container label {
-  margin-right: 8px;
-  font-weight: 600;
-  color: #222;
+.select-group-col {
+  display: flex !important;
+  flex-direction: column !important;
+  align-items: flex-start !important;
+  gap: 6px !important;
+  min-width: 180px !important;
 }
-.selects-container select {
-  margin-right: 24px;
-  padding: 6px 12px;
-  border-radius: 8px;
-  border: 1px solid #ccc;
-  font-size: 1rem;
+.select-group-col label {
+  font-weight: 600 !important;
+  color: #222 !important;
+  margin-bottom: 2px !important;
+  margin-top: 0 !important;
+}
+.select-group-col select {
+  padding: 6px 12px !important;
+  border-radius: 8px !important;
+  border: 1px solid #ccc !important;
+  font-size: 1rem !important;
+  min-width: 180px !important;
 }
 
 .ordenes-grid {
@@ -190,7 +203,16 @@ body, html {
   .selects-container {
     flex-direction: column;
     gap: 12px;
-    padding: 16px 8px 4px 8px;
+    padding: 12px 4px 4px 4px;
+    align-items: stretch;
+  }
+  .select-group-col {
+    width: 100%;
+    min-width: 0;
+  }
+  .select-group-col select {
+    width: 100%;
+    min-width: 0;
   }
   .ordenes-grid {
     gap: 16px;
