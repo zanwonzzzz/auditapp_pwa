@@ -71,7 +71,7 @@
   align-items: flex-start;
   justify-content: center;
   padding: 10px;
-  padding-top: 40px;
+  padding-top: 100px;
   box-sizing: border-box;
 }
 
