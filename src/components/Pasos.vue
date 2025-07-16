@@ -1,7 +1,7 @@
 <template>
   <div class="pasos-container">
     <button @click="Nav('revision')" class="paso-btn">Revision Externa</button>
-    <button class="paso-btn">Domicilio del cliente</button>
+    <button @click="Nav('domicilio')" class="paso-btn">Domicilio del cliente</button>
     <button class="paso-btn">Posteo en falso</button>
     <button class="paso-btn">No localizada</button>
   </div>
