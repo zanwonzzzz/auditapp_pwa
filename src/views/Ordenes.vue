@@ -256,8 +256,8 @@ let foliopisa = null
 
     function Traslado(d)
     {
+        localStorage.setItem('latitud',d[7])
         localStorage.setItem('longitud',d[8])
-        localStorage.setItem('latitud',d[9])
         foliopisa = d[0]
         router.push(`/traslado/${foliopisa}`)
     }
