@@ -35,6 +35,8 @@ class apiService
     Distritos(id_cope){return http.get(`/distritos/${id_cope}`)}
 
     Validarfolio(folio_pisa){return http.get(`/validar/folio/${folio_pisa}`)}
+
+    Auditoria(folio_pisa,data){return http.post(`/nueva/auditoria/${folio_pisa}`,data)}
      
 }
 //estaba devolviendo la clase como tal y no una instancia
