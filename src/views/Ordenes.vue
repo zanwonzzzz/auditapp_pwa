@@ -3,14 +3,20 @@
     <div class="selects-container selects-row">
       <div class="select-group-col">
         <label for="sltCope">Copes</label>
-        <select name="" id="sltCope">
-            <option v-for="d in data_copes" value="">Selecciona el Cope</option>
+        <select name="" id="sltCope"  v-model="copeseleccionado" @change="Distritos">
+          <option value="">Selecciona el Cope</option>
+            <option v-for="d in data_copes" :value="d[0]" :key="d[0]">
+              {{ d[1] }}
+            </option>
         </select>
       </div>
       <div class="select-group-col">
         <label for="sltDistrito">Distritos</label>
         <select name="" id="sltDistrito">
             <option value="">Selecciona el Distrito</option>
+            <option v-for="d in data_distritos" :value="d[0]">
+              {{ d[1] }}
+            </option>
         </select>
       </div>
     </div>
@@ -230,7 +236,6 @@ import { useRouter,useRoute } from 'vue-router'
 import { onMounted } from 'vue'
 import { ref } from 'vue'
 import navbar from '../components/navbar.vue'
-import { RouterLink } from 'vue-router'
 import authService from '../api/authService'
 
 // Font Awesome
@@ -245,17 +250,28 @@ const data_copes= ref([])
 const NUM_RESULTS = 10
 const pag = 1
 let foliopisa = null
-
+const copeseleccionado = ref("")
+const data_distritos = ref([])
 //CONSULTAR LAS ORDENES SOLO UNA BES Y GUARDARLAS EN CACHE Y Q SOLO CON EL POLLINGSE ACTUALISE
   onMounted(async () => {
-     const router = useRouter()
      const copes = await apiService.Copes()
       const idAuditor = await authService.getIdAuditor()
      const ordenes = await apiService.ordenesPendientes(idAuditor)
      data.value = ordenes.data.Ordenes_Pendientes
-     data_copes.value = copes.Copes
+     data_copes.value = copes.data.Copes
     })
 
+    function Distritos()
+    {
+      if(!copeseleccionado.value)
+    {
+      data_distritos.value = []
+      return
+    }
+    console.log(copeseleccionado.value)
+    const distritos =  apiService.Distritos(copeseleccionado.value)
+    data_distritos.value = distritos.data.Distritos
+    }
 
     function Traslado(d)
     {

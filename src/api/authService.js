@@ -1,8 +1,6 @@
 import axios from "axios";
 import { jwtDecode } from "jwt-decode";
-import { useRouter } from "vue-router";
 
-const router = useRouter()
 const http = axios.create({
   baseURL: 'http://127.0.0.1:8000/',
   headers: {
