@@ -8,14 +8,14 @@
 </template>
 
 <script setup>
-import { useRouter } from 'vue-router';
-import { defineEmits } from 'vue';
+import { useRouter,useRoute } from 'vue-router';
 
 const router = useRouter()
-const emit = defineEmits('Nav')
+const route = useRoute()
+const foliopisa = route.params.foliopisa
 
 function Nav(ruta){
-  emit('Nav',ruta)
+  router.push(`/${ruta}/${foliopisa}`)
 }
 </script>
 

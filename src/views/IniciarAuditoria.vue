@@ -52,12 +52,13 @@
         </div>
       </div>
       
-      <div class="buttons-container" v-if="bandera">
+     <!--  <div class="buttons-container" v-if="bandera">
         <button class="action-btn">Fotos</button>
         <button @click="avanzar(false)" class="action-btn primary">Avanzar</button>
-      </div>
+      </div> -->
       
-      <Pasos v-if="!bandera" @Nav="Navegacion"></Pasos>
+      <router-view></router-view>
+      <!--<Pasos v-if="!bandera" @Nav="Navegacion"></Pasos>-->
     </div>
   </div>
 </template>
@@ -194,10 +195,10 @@ import { onMounted, ref } from 'vue';
 import { useRoute } from 'vue-router';
 import Pasos from '../components/Pasos.vue';
 import { useRouter } from 'vue-router';
+import { RouterView } from 'vue-router';
 
 const data = ref([])
 const rutaRE = ref([])
-const bandera = ref(true)
 const route = useRoute()
 const router = useRouter()
 const foliopisa = route.params.foliopisa
@@ -209,14 +210,5 @@ const ruta = "https://vps.ed-intra.com/API/imagesCordiapp/"
     data.value = detalle.data.Detalle_Orden
 
  })
-
- function avanzar(valor)
- {
-   bandera.value = valor
- }
-
- function Navegacion(ruta){
-  router.push(`/${ruta}/${foliopisa}`)
-}
 
 </script>

@@ -1,4 +1,5 @@
 <template>
+    <navbar></navbar>
     <div class="form-container">
         <form @submit.prevent="Observaciones" class="audit-form">
             <div class="form-header">
@@ -18,6 +19,7 @@
             </div>
 
             <button type="submit" class="submit-btn">Finalizar Auditoría</button>
+            <button @click="Nav('/domicilio')" class="submit-btn">Auditoria en Domicilio</button>
         </form>
     </div>
 </template>
@@ -27,6 +29,7 @@ import apiService from '../api/apiService';
 import { useRoute,useRouter } from 'vue-router';
 import { ref } from 'vue';
 import { defineEmits } from 'vue';
+import navbar from './navbar.vue';
 
 const route = useRoute()
 const router = useRouter()

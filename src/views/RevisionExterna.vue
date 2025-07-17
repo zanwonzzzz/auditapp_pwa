@@ -50,10 +50,11 @@
                 <input name="F_Metraje" type="text" v-model="F_Metraje" class="form-input" placeholder="URL de la foto del odómetro">
             </div>
 
-            <button type="submit" class="submit-btn">Avanzar</button>
+            <button type="submit" class="submit-btn" >Avanzar</button>
         </form>
     </div>
-    <Observaciones v-if="!bandera"></Observaciones>
+    <!--<Observaciones v-if="!bandera"></Observaciones>-->
+    <router-view></router-view>
 </template>
 
 <script setup>
@@ -62,6 +63,7 @@ import { useRouter,useRoute } from 'vue-router';
 import { ref } from 'vue';
 import Observaciones from '../components/Observaciones.vue';
 import navbar from '../components/navbar.vue';
+import { RouterView } from 'vue-router';
 
 const route = useRoute()
 const router = useRouter()
@@ -77,7 +79,7 @@ const bandera = ref(true)
 
 function OnSubmit(){
     Revision()
-    avanzar(false)
+    router.push(`/observaciones/${foliopisa}`)
 }
 function Revision()
 {

@@ -4,7 +4,7 @@
       <div class="select-group-col">
         <label for="sltCope">Copes</label>
         <select name="" id="sltCope">
-            <option value="">Selecciona el Cope</option>
+            <option v-for="d in data_copes" value="">Selecciona el Cope</option>
         </select>
       </div>
       <div class="select-group-col">
@@ -241,6 +241,7 @@ library.add(faBinoculars, faPlay)
 
 const router = useRouter()
 const data = ref([]) 
+const data_copes= ref([])
 const NUM_RESULTS = 10
 const pag = 1
 let foliopisa = null
@@ -248,9 +249,11 @@ let foliopisa = null
 //CONSULTAR LAS ORDENES SOLO UNA BES Y GUARDARLAS EN CACHE Y Q SOLO CON EL POLLINGSE ACTUALISE
   onMounted(async () => {
      const router = useRouter()
+     const copes = await apiService.Copes()
       const idAuditor = await authService.getIdAuditor()
      const ordenes = await apiService.ordenesPendientes(idAuditor)
      data.value = ordenes.data.Ordenes_Pendientes
+     data_copes.value = copes.Copes
     })
 
 

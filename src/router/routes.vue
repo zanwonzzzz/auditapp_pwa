@@ -1,6 +1,6 @@
 <script>
 import { createRouter,createWebHistory } from 'vue-router';
-
+//cuando declaras las rutas si es por orden 
 const routes = [
   {
     path: "/",
@@ -21,13 +21,33 @@ const routes = [
   ,
    {
     path: "/detalle/:foliopisa",
-    component: () => import('../views/IniciarAuditoria.vue')
+    component: () => import('../views/IniciarAuditoria.vue'),
+    children: [
+    {
+      path: '',
+      redirect: to => {
+        return `/detalle/${to.params.foliopisa}/avanzar`
+      }
+    },
+      {
+        path: 'avanzar',
+        component: () => import('../components/Avanzar.vue'),
+      },
+      {
+        path: 'pasos',
+        component: () => import('../components/Pasos.vue'),
+      }
+    ]
   },
   ,
    {
     path: "/revision/:foliopisa",
     component: () => import('../views/RevisionExterna.vue')
   },
+   {
+        path: '/observaciones/:foliopisa',
+        component: () => import('../components/Observaciones.vue'),
+    }
   ,
    {
     path: "/domicilio/:foliopisa",
