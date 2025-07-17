@@ -9,9 +9,9 @@
         <button @click="logout" class="apartado">
           <font-awesome-icon :icon="['fas', 'power-off']" />
         </button>
-        <button class="apartado">
+        <router-link to="/busqueda"   class="apartado">
           <font-awesome-icon :icon="['fas', 'user-gear']" />
-        </button>
+        </router-link>
       </div>
     </div>
   </div>
