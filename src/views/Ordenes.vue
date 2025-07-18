@@ -45,7 +45,7 @@
           <div class="orden-buttons">
             <button class="btn-rojo" @click="Traslado(d)"><font-awesome-icon :icon="['fas', 'binoculars']" /></button>
             <button class="btn-verde" @click="IniciarAuditoria(d)"><font-awesome-icon :icon="['fas', 'play']" /></button>
-            <button v-if="(d[9] != '' && d[9] != null && d[9] != undefined) && (d[10] != '' && d[10] != null && d[10] != undefined)" class="btn-amarillo"><font-awesome-icon :icon="['fas', 'binoculars']" /></button>
+            <button v-if="(d[9] != '' && d[9] != null && d[9] != undefined) && (d[10] != '' && d[10] != null && d[10] != undefined)" @click="Traslado(d)" class="btn-amarillo"><font-awesome-icon :icon="['fas', 'binoculars']" /></button>
           </div>
           <div class="orden-info">
             <div>{{ d[5] }}</div>
@@ -313,7 +313,7 @@ library.add(faBinoculars, faPlay, faSearch)
 const router = useRouter()
 const data = ref([]) 
 const data_copes= ref([])
-const data_original = ref([]) // Para mantener los datos originales
+const data_original = ref([])
 const NUM_RESULTS = 5
 const pag = ref(1)
 let foliopisa = null
