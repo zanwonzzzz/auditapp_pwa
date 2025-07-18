@@ -43,7 +43,6 @@ import { useRoute,useRouter } from 'vue-router';
 import { ref,onMounted } from 'vue';
 import { defineEmits } from 'vue';
 import navbar from './navbar.vue';
-import { useRoute,useRouter } from 'vue-router';
 import {useToast} from 'vue-toast-notification';
 import 'vue-toast-notification/dist/theme-sugar.css';
 

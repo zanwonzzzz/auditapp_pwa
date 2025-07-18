@@ -19,6 +19,19 @@
             </option>
         </select>
       </div>
+      <div class="select-group-col">
+        <label for="searchInput">Buscar</label>
+        <div class="search-container">
+          <input 
+            type="text" 
+            id="searchInput"
+            placeholder="Buscar por folio, distrito, terminal..."
+            @input="Buscar"
+            class="search-input"
+          >
+          <font-awesome-icon :icon="['fas', 'search']" class="search-icon" />
+        </div>
+      </div>
     </div>
     <div class="main-bg">
       <div class="ordenes-grid">
@@ -32,7 +45,7 @@
           <div class="orden-buttons">
             <button class="btn-rojo" @click="Traslado(d)"><font-awesome-icon :icon="['fas', 'binoculars']" /></button>
             <button class="btn-verde" @click="IniciarAuditoria(d)"><font-awesome-icon :icon="['fas', 'play']" /></button>
-            <button class="btn-amarillo"><font-awesome-icon :icon="['fas', 'binoculars']" /></button>
+            <button v-if="(d[9] != '' && d[9] != null && d[9] != undefined) && (d[10] != '' && d[10] != null && d[10] != undefined)" class="btn-amarillo"><font-awesome-icon :icon="['fas', 'binoculars']" /></button>
           </div>
           <div class="orden-info">
             <div>{{ d[5] }}</div>
@@ -42,12 +55,12 @@
         <nav aria-label="Page navigation" class="text-center">
             <ul class="pagination text-center">
                 <li>
-                    <a href="#" aria-label="Previous" v-show="pag != 1" @click.prevent="pag -= 1">
+                    <a href="#" aria-label="Previous" v-show="pag > 1" @click.prevent="pag--">
                         <span aria-hidden="true">Anterior</span>
                     </a>
                 </li>
                 <li>
-                    <a href="#" aria-label="Next" v-show="pag * NUM_RESULTS / data.length < 1" @click.prevent="pag += 1">
+                    <a href="#" aria-label="Next" v-show="pag * NUM_RESULTS < data.length" @click.prevent="pag++">
                         <span aria-hidden="true">Siguiente</span>
                     </a>
                 </li>
@@ -76,14 +89,14 @@ body, html {
   display: flex !important;
   flex-direction: row !important;
   gap: 32px !important;
-  margin: 32px auto 32px auto !important;
+  margin: 50px auto 32px auto !important;
   justify-content: center !important;
   align-items: flex-start !important;
   background: #fff !important;
   padding: 24px 16px 8px 16px !important;
   border-radius: 12px !important;
   max-width: 1200px !important;
-  /* border: 2px dashed #b81933;  Eliminado el borde */
+  flex-wrap: wrap !important;
 }
 .select-group-col {
   display: flex !important;
@@ -104,6 +117,42 @@ body, html {
   border: 1px solid #ccc !important;
   font-size: 1rem !important;
   min-width: 180px !important;
+}
+
+.search-container {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.search-input {
+  padding: 8px 40px 8px 12px !important;
+  border-radius: 8px !important;
+  border: 1px solid #ccc !important;
+  font-size: 1rem !important;
+  min-width: 180px !important;
+  background: #fff !important;
+  color: #333 !important;
+  transition: all 0.3s ease;
+}
+
+.search-input:focus {
+  outline: none !important;
+  border-color: #b81933 !important;
+  box-shadow: 0 0 0 2px rgba(184, 25, 51, 0.1) !important;
+}
+
+.search-input::placeholder {
+  color: #999;
+  font-style: italic;
+}
+
+.search-icon {
+  position: absolute;
+  right: 12px;
+  color: #666;
+  font-size: 0.9rem;
+  pointer-events: none;
 }
 
 .ordenes-grid {
@@ -207,21 +256,38 @@ body, html {
     padding-top: 0;
   }
   .selects-container {
-    flex-direction: column;
-    gap: 12px;
-    padding: 12px 4px 4px 4px;
-    align-items: stretch;
+    flex-direction: column !important;
+    gap: 16px !important;
+    padding: 16px 12px !important;
+    align-items: stretch !important;
+    margin: 45px auto 16px auto !important;
   }
   .select-group-col {
-    width: 100%;
-    min-width: 0;
+    width: 100% !important;
+    min-width: 0 !important;
   }
   .select-group-col select {
-    width: 100%;
-    min-width: 0;
+    width: 100% !important;
+    min-width: 0 !important;
+    padding: 10px 12px !important;
+    font-size: 16px !important;
+  }
+  .search-container {
+    width: 100% !important;
+  }
+  .search-input {
+    width: 100% !important;
+    min-width: 0 !important;
+    padding: 10px 40px 10px 12px !important;
+    font-size: 16px !important; /* Evita zoom en iOS */
+  }
+  .search-icon {
+    right: 15px;
+    font-size: 1rem;
   }
   .ordenes-grid {
     gap: 16px;
+    width: 95vw;
   }
   .orden-card {
     padding: 16px 8px;
@@ -240,28 +306,31 @@ import authService from '../api/authService'
 
 // Font Awesome
 import { library } from '@fortawesome/fontawesome-svg-core'
-import { faBinoculars, faPlay } from '@fortawesome/free-solid-svg-icons'
+import { faBinoculars, faPlay, faSearch } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
-library.add(faBinoculars, faPlay)
+library.add(faBinoculars, faPlay, faSearch)
 
 const router = useRouter()
 const data = ref([]) 
 const data_copes= ref([])
-const NUM_RESULTS = 10
-const pag = 1
+const data_original = ref([]) // Para mantener los datos originales
+const NUM_RESULTS = 5
+const pag = ref(1)
 let foliopisa = null
 const copeseleccionado = ref("")
 const data_distritos = ref([])
+
 //CONSULTAR LAS ORDENES SOLO UNA BES Y GUARDARLAS EN CACHE Y Q SOLO CON EL POLLINGSE ACTUALISE
   onMounted(async () => {
      const copes = await apiService.Copes()
       const idAuditor = await authService.getIdAuditor()
      const ordenes = await apiService.ordenesPendientes(idAuditor)
      data.value = ordenes.data.Ordenes_Pendientes
+     data_original.value = ordenes.data.Ordenes_Pendientes
      data_copes.value = copes.data.Copes
     })
 
-    function Distritos()
+    async function Distritos()
     {
       if(!copeseleccionado.value)
     {
@@ -269,7 +338,7 @@ const data_distritos = ref([])
       return
     }
     console.log(copeseleccionado.value)
-    const distritos =  apiService.Distritos(copeseleccionado.value)
+    const distritos = await apiService.Distritos(copeseleccionado.value)
     data_distritos.value = distritos.data.Distritos
     }
 
@@ -283,6 +352,24 @@ const data_distritos = ref([])
 
     function IniciarAuditoria(d){foliopisa=d[0]  
         router.push(`/detalle/${foliopisa}`)}
+
+    const Buscar = (e) => {
+      const searchTerm = e.target.value.toLowerCase()
+      if(searchTerm === '') {
+        data.value = data_original.value
+        return
+      }
+      
+      const filtradota = data_original.value.filter(d => {
+        const foliopisa = d[0].toLowerCase().includes(searchTerm)
+        const distrito = d[3].toLowerCase().includes(searchTerm)
+        const terminal = d[1].toLowerCase().includes(searchTerm)
+        const puerto = d[2].toLowerCase().includes(searchTerm)
+        
+        return foliopisa || distrito || terminal || puerto
+      })
+      data.value = filtradota
+    }
     
 
 

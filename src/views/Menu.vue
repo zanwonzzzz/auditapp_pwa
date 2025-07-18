@@ -48,12 +48,13 @@
 }
 
 .apartado {
-  background: #2f6ab8;
+  background: #e74c3c;
   padding: 10px 18px;
   border-radius: 10px;
   box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.37);
   display: flex;
   align-items: center;
+  justify-content: center;
   gap: 8px;
   color: #fff;
   font-size: 1.1rem;
@@ -65,7 +66,7 @@
 }
 
 .apartado:hover {
-  background: #1d4e89;
+  background: #c0392b;
 }
 
 .logo-img {
@@ -76,17 +77,27 @@
 @media (max-width: 600px) {
   .login-box {
     min-width: 0;
-    width: 95vw;
-    padding: 24px 8px;
+    width: 85vw;
+    padding: 20px 12px;
+    margin: 0 10px;
   }
   .menu-buttons {
     flex-direction: column;
-    gap: 12px;
+    gap: 10px;
     width: 100%;
+    padding: 0 8px;
   }
   .apartado {
     width: 100%;
     justify-content: center;
+    padding: 10px 12px;
+    font-size: 0.9rem;
+    min-width: 0;
+    box-sizing: border-box;
+  }
+  .logo-img {
+    width: 150px;
+    margin-bottom: 20px;
   }
 }
 </style>

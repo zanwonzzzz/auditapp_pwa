@@ -5,7 +5,7 @@
       <label for="txtObservacionesFinales">OBSERVACIONES FINALES</label>
       <textarea name="P_Observaciones_Finales" id="P_Observaciones_Finales" v-model="P_Observaciones_Finales"></textarea>
       <button type="submit">Finalizar Auditoria</button>
-      <button type="button" :disabled="FotoTerminal != ''">Revision Externa</button>
+      <button type="button"  @click="revision" :disabled="FotoTerminal == '' || FotoTerminal == null || FotoTerminal == undefined">Revision Externa</button>
     </form>
   </div>
 </template>
@@ -29,13 +29,13 @@ onMounted(() => {
 
 function AuditoriaCompletada()
 {
-    if(!(FotoTerminal.value !== '' && FotoTerminal.value !== null && FotoTerminal.value !== undefined))
-    {
+    
         apiService.Inserts(foliopisa,{"Estatus_Auditoria":"COMPLETADA"})
         $toast.success('Auditoria Finalizada')
         router.push('/ordenes')
-    }
+    
 }
+function revision(){router.push(`/revision/externa/${foliopisa}`)}
 
 
 

@@ -47,13 +47,14 @@ import { useRoute,useRouter } from 'vue-router';
 import { ref } from 'vue';
 import {useToast} from 'vue-toast-notification';
 import 'vue-toast-notification/dist/theme-sugar.css';
+import apiService from '../api/apiService';
 
 const $toast = useToast();
 const foliopisa = useRoute().params.foliopisa
 const router = useRouter()
 const bandera = ref(true)
 const fotoTerminal = ref('')
-const tecnico = apiService.ValoresTecnico(foliopisa,"Tecnologia")
+const tecnologia = apiService.ValoresTecnico(foliopisa,"Tecnologia")
 const Acceso_Domicilio = ref('')
 const P_Cobro_Instalacion = ref('')
 
@@ -97,7 +98,7 @@ function Localizado()
     apiService.Inserts(foliopisa,{"P_Cobro_Instalacion":P_Cobro_Instalacion.value,"Acceso_Domicilio":Acceso_Domicilio.value,"P_Cliente":"SI"})
 
     if(Acceso_Domicilio.value == 'SI'){
-        if(tecnico.value != "" && tecnologia.value == 'COBRE'){
+        if(tecnologia.value != "" && tecnologia.value == 'COBRE'){
             router.push(`/interior/cobre/${foliopisa}`)
         }else {
             router.push(`/interior/fibra/${foliopisa}`)
