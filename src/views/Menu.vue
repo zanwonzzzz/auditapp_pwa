@@ -1,7 +1,7 @@
 <template>
   <div class="main-bg">
     <div class="login-box">
-      <img id="imagen" src="../assets/auditap.png" alt="auditapp" class="logo-img">
+      <img id="imagen" src="/auditap.png" alt="auditapp" class="logo-img">
       <div class="menu-buttons">
         <router-link to="/ordenes" class="apartado">
           <font-awesome-icon :icon="['fas', 'suitcase']" />

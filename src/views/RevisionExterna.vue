@@ -9,7 +9,7 @@
             
             <div class="form-group">
                 <label for="Tecnologia_Auditor">SELECCIONA TECNOLOGÍA</label>
-                <select name="Tecnologia_Auditor" id="Tecnologia_Auditor" v-model="Tecnologia_Auditor" class="form-select">
+                <select name="Tecnologia_Auditor" id="Tecnologia_Auditor" v-model="Tecnologia_Auditor" class="form-select" required>
                     <option value="">Selecciona la Tecnología</option>
                     <option value="FIBRA">FIBRA</option>
                     <option value="COBRE">COBRE</option>
@@ -18,7 +18,7 @@
 
             <div class="form-group">
                 <label for="Coincide_Instalacion">SELECCIONA TIPO DE INSTALACIÓN</label>
-                <select name="Coincide_Instalacion" id="Coincide_Instalacion" v-model="Coincide_Instalacion" class="form-select">
+                <select name="Coincide_Instalacion" id="Coincide_Instalacion" v-model="Coincide_Instalacion" class="form-select" required>
                     <option value="">Selecciona el Tipo</option>
                     <option value="AEREA">AÉREA</option>
                     <option value="SUBTERRANEA">SUBTERRÁNEA</option>
@@ -27,27 +27,27 @@
 
             <div class="form-group">
                 <label for="P_Distrito">DISTRITO</label>
-                <input name="P_Distrito" type="text" v-model="P_Distrito" class="form-input" placeholder="Ingrese el distrito">
+                <input name="P_Distrito" type="text" v-model="P_Distrito" class="form-input" placeholder="Ingrese el distrito" required>
             </div>
 
             <div class="form-group">
                 <label for="P_Terminal">TERMINAL</label>
-                <input name="P_Terminal" type="text" v-model="P_Terminal" class="form-input" placeholder="Ingrese la terminal">
+                <input name="P_Terminal" type="text" v-model="P_Terminal" class="form-input" placeholder="Ingrese la terminal" required>
             </div>
 
             <div class="form-group">
                 <label for="F_Terminal_Abierta_Cerrada">FOTO: TERMINAL</label>
-                <input name="F_Terminal_Abierta_Cerrada" type="text" v-model="F_Terminal_Abierta_Cerrada" class="form-input" placeholder="URL de la foto">
+                <input name="F_Terminal_Abierta_Cerrada" type="file" accept="image/*" @change="onFileChangeTerminal" class="form-input" required />
             </div>
 
             <div class="form-group">
                 <label for="P_Metraje_obtenido">¿Metraje obtenido en revisión?</label>
-                <input name="P_Metraje_obtenido" type="text" v-model="P_Metraje_obtenido" class="form-input" placeholder="Ingrese el metraje">
+                <input name="P_Metraje_obtenido" type="text" v-model="P_Metraje_obtenido" class="form-input" placeholder="Ingrese el metraje" required>
             </div>
 
             <div class="form-group">
                 <label for="F_Metraje">FOTO ODOMETRO</label>
-                <input name="F_Metraje" type="text" v-model="F_Metraje" class="form-input" placeholder="URL de la foto del odómetro">
+                <input name="F_Metraje" type="file" accept="image/*" @change="onFileChangeMetraje" class="form-input" required />
             </div>
 
             <button type="submit" class="submit-btn" >Avanzar</button>
@@ -72,21 +72,33 @@ const Tecnologia_Auditor = ref('')
 const Coincide_Instalacion = ref('')
 const P_Distrito = ref('')
 const P_Terminal = ref('')
-const F_Terminal_Abierta_Cerrada = ref('')
+const F_Terminal_Abierta_Cerrada = ref(null)
 const P_Metraje_obtenido = ref('')
-const F_Metraje = ref('')
+const F_Metraje = ref(null)
 const bandera = ref(true)
 
 function OnSubmit(){
     Revision()
     router.push(`/observaciones/${foliopisa}`)
 }
+function onFileChangeTerminal(e) {
+  const file = e.target.files[0]
+  F_Terminal_Abierta_Cerrada.value = file || null
+}
+function onFileChangeMetraje(e) {
+  const file = e.target.files[0]
+  F_Metraje.value = file || null
+}
 function Revision()
 {
-   apiService.Inserts(foliopisa,{"Tecnologia_Auditor":Tecnologia_Auditor.value,
-    "Coincide_Instalacion":Coincide_Instalacion.value,"P_Distrito":P_Distrito.value,
-    "P_Terminal":P_Terminal.value,"F_Terminal_Abierta_Cerrada":F_Terminal_Abierta_Cerrada.value,
-    "P_Metraje_obtenido":P_Metraje_obtenido.value,"F_Metraje":F_Metraje.value,
+   apiService.Inserts(foliopisa,{
+    "Tecnologia_Auditor":Tecnologia_Auditor.value,
+    "Coincide_Instalacion":Coincide_Instalacion.value,
+    "P_Distrito":P_Distrito.value,
+    "P_Terminal":P_Terminal.value,
+    "F_Terminal_Abierta_Cerrada": F_Terminal_Abierta_Cerrada.value ? F_Terminal_Abierta_Cerrada.value.name : '',
+    "P_Metraje_obtenido":P_Metraje_obtenido.value,
+    "F_Metraje": F_Metraje.value ? F_Metraje.value.name : '',
    })
 }
 

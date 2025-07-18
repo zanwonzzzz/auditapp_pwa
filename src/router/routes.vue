@@ -58,6 +58,14 @@ const routes = [
     component: () => import('../views/Cliente.vue')
   },
   {
+    path: "/interior/fibra/:foliopisa",
+    component: () => import('../views/InteriorFibra.vue')
+  },
+  {
+    path: "/observaciones/finales/:foliopisa",
+    component: () => import('../components/ObservacionesFinales.vue')
+  },
+  {
     path: "/busqueda",
     component: () => import('../views/Busqueda.vue')
   },

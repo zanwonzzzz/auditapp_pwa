@@ -5,10 +5,10 @@
       <h2 class="titulo">Búsqueda de Auditoría</h2>
       <form class="formulario">
         <label for="foliopisa">Teclea el folio para auditoría</label>
-        <input type="text" id="foliopisa" name="foliopisa" v-model="folio" @input="ValidarFolio" placeholder="Folio...">
+        <input type="text" id="foliopisa" name="foliopisa" v-model="folio" @input="ValidarFolio" placeholder="Folio..." required>
 
         <label for="sltTecnologia">Selecciona la tecnología</label>
-        <select name="sltTecnologia" id="sltTecnologia" v-model="tecnologia">
+        <select name="sltTecnologia" id="sltTecnologia" v-model="tecnologia" required>
           <option value="">SELECCIONA LA TECNOLOGIA</option>
           <option value="FIBRA">FIBRA</option>
           <option value="COBRE">COBRE</option>

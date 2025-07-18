@@ -3,13 +3,13 @@
 <label for="">Orden:{{ foliopisa }}</label>
 <form @submit.prevent="OnSubmit">
 <label for="">FOTOGRAFIA DOMICILIO</label>
-<input type="text" name='Foto_No_Ubicado' v-model="Foto_No_Ubicado">
+<input type="file" name='Foto_No_Ubicado' accept="image/*" @change="onFileChange" required>
 <label for="">LATITUD</label>
 <input type="text" name='lat_auditor' v-model="lat_auditor">
 <label for="">LONGITUD</label>
 <input type="text" name='lat_auditor' v-model="lat_auditor">
 <label for="">COMENTARIOS</label>
-<input type="text" name='P_Observaciones_Finales' v-model="P_Observaciones_Finales">
+<input type="text" name='P_Observaciones_Finales' v-model="P_Observaciones_Finales" required>
 <button type="submit">Avanzar</button>
 </form>
 
@@ -27,7 +27,7 @@ const foliopisa = route.params.foliopisa
 const lat_auditor = ref("")
 const lon_auditor = ref("")
 const P_Observaciones_Finales = ref("")
-const Foto_No_Ubicado = ref("")
+const Foto_No_Ubicado = ref(null)
 
 function useGeolocation() {
   if (!navigator.geolocation) {
@@ -50,6 +50,11 @@ onMounted(() => {
   useGeolocation()
 })
 
+function onFileChange(e) {
+  const file = e.target.files[0]
+  Foto_No_Ubicado.value = file || null
+}
+
 function OnSubmit()
 {
      const now = new Date()
@@ -61,7 +66,7 @@ function OnSubmit()
     const ss = String(now.getSeconds()).padStart(2, '0')
     const fecha_auditoria = `${yyyy}-${mm}-${dd} ${hh}:${min}:${ss}`
 
-    const noExiste = apiService.Inserts(foliopisa,{"Foto_No_Ubicado":Foto_No_Ubicado.value,
+    const noExiste = apiService.Inserts(foliopisa,{"Foto_No_Ubicado":Foto_No_Ubicado.value ? Foto_No_Ubicado.value.name : '',
      "P_Observaciones_Finales":P_Observaciones_Finales.value,"P_Domicilio":"NO",
      "Estatus_Auditoria":"NO LOCALIZADA","lat_auditor":lat_auditor.value,
      "lon_auditor":lon_auditor.value,"Fecha_Fin":fecha_auditoria.value

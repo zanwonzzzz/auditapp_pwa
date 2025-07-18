@@ -19,7 +19,7 @@
       
       <div class="form-group">
         <label for="P_Cobro_Instalacion">¿Le solicitaron algún cobro por la instalación?</label>
-        <select name="P_Cobro_Instalacion" id="P_Cobro_Instalacion" class="form-input">
+        <select name="P_Cobro_Instalacion" id="P_Cobro_Instalacion" class="form-input" v-model="P_Cobro_Instalacion" required>
           <option value="">Selecciona una respuesta</option>
           <option value="SI">SI</option>
           <option value="NO">NO</option>
@@ -28,7 +28,7 @@
       
       <div class="form-group">
         <label for="Acceso_Domicilio">¿Pudo acceder al domicilio?</label>
-        <select name="Acceso_Domicilio" id="Acceso_Domicilio" class="form-input">
+        <select name="Acceso_Domicilio" id="Acceso_Domicilio" v-model="Acceso_Domicilio" class="form-input" required>
           <option value="">Selecciona una respuesta</option>
           <option value="SI">SI</option>
           <option value="NO">NO</option>
@@ -45,9 +45,18 @@
 import navbar from '../components/navbar.vue';
 import { useRoute,useRouter } from 'vue-router';
 import { ref } from 'vue';
+import {useToast} from 'vue-toast-notification';
+import 'vue-toast-notification/dist/theme-sugar.css';
 
+const $toast = useToast();
+const foliopisa = useRoute().params.foliopisa
 const router = useRouter()
 const bandera = ref(true)
+const fotoTerminal = ref('')
+const tecnico = apiService.ValoresTecnico(foliopisa,"Tecnologia")
+const Acceso_Domicilio = ref('')
+const P_Cobro_Instalacion = ref('')
+
 function OnSubmit($event)
 {
     var boton = showMessage($event)
@@ -64,7 +73,42 @@ function showMessage(event)
 function LocalizadoN(nombre)
 {
     if(nombre == "Cliente_Lo"){bandera.value = false}
-    else {router.push('/ordenes')}
+    else {
+    fotoTerminal.value = apiService.Valores(foliopisa,"Foto_Terminal")
+    if(!fotoTerminal.value == ''){
+        const now = new Date()
+        const yyyy = now.getFullYear()
+        const mm = String(now.getMonth() + 1).padStart(2, '0')
+        const dd = String(now.getDate()).padStart(2, '0')
+        const hh = String(now.getHours()).padStart(2, '0')
+        const min = String(now.getMinutes()).padStart(2, '0')
+        const ss = String(now.getSeconds()).padStart(2, '0')
+        const fecha_auditoria = `${yyyy}-${mm}-${dd} ${hh}:${min}:${ss}`
+
+        const AuditoriaParcialNoCiente = apiService.Inserts(foliopisa,{"Foto_Terminal":fotoTerminal.value,"Estatus_Auditoria":"PARCIAL","P_Cliente":"NO","Fecha_Fin":fecha_auditoria,})
+        $toast.success('Auditoría Finalizada correctamente');
+        router.push('/ordenes')
+
+    }else {router.push(`/revision/${foliopisa}`)}
+    }
+}
+function Localizado()
+{
+    apiService.Inserts(foliopisa,{"P_Cobro_Instalacion":P_Cobro_Instalacion.value,"Acceso_Domicilio":Acceso_Domicilio.value,"P_Cliente":"SI"})
+
+    if(Acceso_Domicilio.value == 'SI'){
+        if(tecnico.value != "" && tecnologia.value == 'COBRE'){
+            router.push(`/interior/cobre/${foliopisa}`)
+        }else {
+            router.push(`/interior/fibra/${foliopisa}`)
+        }
+    }
+    else{
+       apiService.Inserts(foliopisa,{"Estatus_Auditoria":"PARCIAL"})
+       $toast.success('Auditoría Finalizada');
+       router.push('/ordenes')
+    }
+
 }
 
 </script>

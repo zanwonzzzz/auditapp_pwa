@@ -10,11 +10,12 @@
             <div class="form-group">
                 <label for="Foto_Domicilio">FOTO: DOMICILIO</label>
                 <input 
-                    type="text" 
+                    type="file" 
                     name="Foto_Domicilio" 
-                    v-model="Foto_Domicilio"
+                    accept="image/*"
+                    @change="onFileChange"
                     class="form-input"
-                    placeholder="URL de la foto del domicilio"
+                    required
                 />
             </div>
 
@@ -55,7 +56,7 @@ import navbar from '../components/navbar.vue'
 
 const lat_auditor = ref('')
 const lon_auditor = ref('')
-const Foto_Domicilio = ref('')
+const Foto_Domicilio = ref(null) // ahora es archivo
 const error = ref('')
 const router = useRouter()
 const route = useRoute()
@@ -83,12 +84,19 @@ onMounted(() => {
   useGeolocation()
 })
 
+function onFileChange(e) {
+  const file = e.target.files[0]
+  Foto_Domicilio.value = file || null
+}
+
 function Domicilio() {
-  apiService.Inserts(foliopisa,{"Foto_Domicilio":Foto_Domicilio.value,
-    "lat_auditor":lat_auditor.value,"lon_auditor":lon_auditor.value,
+  // Aquí solo se manda el nombre del archivo, puedes adaptar para subirlo si lo necesitas
+  apiService.Inserts(foliopisa,{
+    "Foto_Domicilio": Foto_Domicilio.value ? Foto_Domicilio.value.name : '',
+    "lat_auditor":lat_auditor.value,
+    "lon_auditor":lon_auditor.value,
     "P_Domicilio":P_Domicilio.value
   })
-  
   router.push(`/cliente/${foliopisa}`)
 }
 </script>

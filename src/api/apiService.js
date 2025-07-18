@@ -28,6 +28,8 @@ class apiService
 
     Valores(folio_pisa,campos){return http.get(`/valores/${folio_pisa}/${campos}/`)}
 
+    ValoresTecnico(folio_pisa,campos){return http.get(`/valores/tecnico/${folio_pisa}/${campos}/`)}
+
     Inserts(folio_pisa,data){return http.put(`/no/existe/${folio_pisa}`,data)}
 
     Copes(){return http.get(`/copes`)}

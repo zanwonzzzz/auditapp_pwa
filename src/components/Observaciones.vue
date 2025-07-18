@@ -3,7 +3,7 @@
     <div class="form-container">
         <form @submit.prevent="Observaciones" class="audit-form">
             <div class="form-header">
-                <h2>Observaciones Finales</h2>
+                <h2>Observaciones Adicionales</h2>
                 <p>Complete las observaciones de la auditoría</p>
             </div>
             
@@ -18,8 +18,21 @@
                 ></textarea>
             </div>
 
-            <button type="submit" class="submit-btn">Finalizar Auditoría</button>
-            <button @click="Nav('/domicilio')" class="submit-btn">Auditoria en Domicilio</button>
+            <button
+              class="btn btn-success btn-block"
+              :disabled="!presenciaCliente"
+              :title="!presenciaCliente ? 'Debe registrar la presencia del cliente antes de finalizar la auditoría' : ''"
+              @click="finalizarAuditoria"
+            >
+              Finalizar Auditoría
+            </button>
+            <button
+              class="btn btn-success btn-block"
+              :disabled="presenciaCliente == 'SI' || presenciaCliente == 'NO'"
+              :title="presenciaCliente ? 'Ya se registró presencia del cliente' : ''"
+            >
+              Auditoría En Domicilio
+            </button>
         </form>
     </div>
 </template>
@@ -27,18 +40,48 @@
 <script setup>
 import apiService from '../api/apiService';
 import { useRoute,useRouter } from 'vue-router';
-import { ref } from 'vue';
+import { ref,onMounted } from 'vue';
 import { defineEmits } from 'vue';
 import navbar from './navbar.vue';
+import { useRoute,useRouter } from 'vue-router';
+import {useToast} from 'vue-toast-notification';
+import 'vue-toast-notification/dist/theme-sugar.css';
+
+const $toast = useToast();
 
 const route = useRoute()
 const router = useRouter()
 const foliopisa = route.params.foliopisa
 const emit = defineEmits('Nav')
 const P_Observaciones_Finales = ref('')
+const presenciaCliente = ref('')
+const Estatus_Auditoria = ref('')
 
-function Observaciones(){apiService.Inserts(foliopisa,P_Observaciones_Finales.value)}
+function Observaciones(){apiService.Inserts(foliopisa,{"P_Observaciones_Finales":P_Observaciones_Finales.value})
+router.push(`/domicilio/${foliopisa}`)   }
 function Nav(ruta){router.push(`${ruta}/${foliopisa}`)}
+
+onMounted(() => {
+    presenciaCliente.value = apiService.Valores(foliopisa,"P_Cliente")
+    finalizarAuditoria()
+})
+
+
+function finalizarAuditoria() {
+  if (!(presenciaCliente.value !== '' && presenciaCliente.value !== null && presenciaCliente.value !== undefined)){
+  if (presenciaCliente.value === 'SI') {
+    Estatus_Auditoria.value = 'COMPLETADA'
+    apiService.Inserts(foliopisa,{"Estatus_Auditoria":Estatus_Auditoria.value})
+    $toast.success('Auditoría finalizada correctamente');
+    router.push('/ordenes')
+  } else {
+    Estatus_Auditoria.value = 'PARCIAL'
+    apiService.Inserts(foliopisa,{"Estatus_Auditoria":Estatus_Auditoria.value})
+    $toast.success('Auditoría parcial registrada correctamente');
+    router.push('/ordenes')
+  }
+}
+}
 
 </script>
 
@@ -155,6 +198,14 @@ function Nav(ruta){router.push(`${ruta}/${foliopisa}`)}
 
 .submit-btn:active {
     transform: translateY(-1px);
+}
+
+.btn[disabled], .btn:disabled {
+    background: #ccc !important;
+    color: #888 !important;
+    cursor: not-allowed !important;
+    opacity: 0.7;
+    border: 1px solid #bbb;
 }
 
 
