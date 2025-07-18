@@ -61,6 +61,14 @@ const routes = [
     path: "/busqueda",
     component: () => import('../views/Busqueda.vue')
   },
+  {
+    path: "/no/existe/:foliopisa",
+    component: () => import('../views/NoExiste.vue')
+  },
+  {
+    path: "/no/domicilio/:foliopisa",
+    component: () => import('../views/NoDomicilio.vue')
+  },
 ];
 //createWebHistory se utiliza para manejar la navegación en aplicaciones Vue 3 con URLs limpias 
 const router = createRouter({

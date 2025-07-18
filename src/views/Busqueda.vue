@@ -71,9 +71,9 @@ function Avanzar(){
     const ss = String(now.getSeconds()).padStart(2, '0')
     const fecha_auditoria = `${yyyy}-${mm}-${dd} ${hh}:${min}:${ss}`
     console.log(fecha_auditoria,idAuditor.value,tecnologia.value,folio.value)
-    const auditoria = apiService.Auditoria(folio.value,{"Auditor":idAuditor.value,"Fecha_Inicio":fecha_auditoria,"Tecnologia_Auditoria":tecnologia.value,
+    const auditoria = apiService.Auditoria(folio.value,{"Auditor":idAuditor.value,"Fecha_Inicio":fecha_auditoria,"Tecnologia_Auditor":tecnologia.value,
                                             "Estatus_Auditoria":"PENDIENTE"})
-    //router.push(`/detalle/${folio.value}/avanzar`)
+    router.push(`/detalle/${folio.value}/avanzar`)
     }
 </script>
 
