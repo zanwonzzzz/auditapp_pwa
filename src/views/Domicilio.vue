@@ -62,6 +62,7 @@ const router = useRouter()
 const route = useRoute()
 const foliopisa = route.params.foliopisa
 const P_Domicilio = "SI"
+const directorioDomicilio = '../domicilio_fotos'
 
 function useGeolocation() {
   if (!navigator.geolocation) {

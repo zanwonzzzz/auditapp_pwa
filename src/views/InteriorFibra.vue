@@ -42,6 +42,8 @@ const fotoModem = ref(null)
 const fotoRoseta = ref(null)
 const foliopisa = useRoute().params.foliopisa
 const router = useRouter()
+const directorioModem = '../modem_funcionando_fotos'
+const directorioRoseta = '../roseta_fotos'
 function OnSubmit()
 {
     apiService.Inserts(foliopisa,{"F_ModemFuncionando":fotoModem.value,"P_ModemFuncionando":valorLedsVerdes.value,"F_Roseta":fotoRoseta.value,"P_Roseta":valorInstalacionRoseta.value})

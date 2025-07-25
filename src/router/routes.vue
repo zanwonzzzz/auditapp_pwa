@@ -62,6 +62,10 @@ const routes = [
     component: () => import('../views/InteriorFibra.vue')
   },
   {
+    path: "/interior/cobre/:foliopisa",
+    component: () => import('../views/InteriorCobre.vue')
+  },
+  {
     path: "/observaciones/finales/:foliopisa",
     component: () => import('../components/ObservacionesFinales.vue')
   },

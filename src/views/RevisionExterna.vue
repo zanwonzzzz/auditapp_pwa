@@ -53,7 +53,6 @@
             <button type="submit" class="submit-btn" >Avanzar</button>
         </form>
     </div>
-    <!--<Observaciones v-if="!bandera"></Observaciones>-->
     <router-view></router-view>
 </template>
 
@@ -61,7 +60,6 @@
 import apiService from '../api/apiService';
 import { useRouter,useRoute } from 'vue-router';
 import { ref } from 'vue';
-import Observaciones from '../components/Observaciones.vue';
 import navbar from '../components/navbar.vue';
 import { RouterView } from 'vue-router';
 
@@ -76,6 +74,8 @@ const F_Terminal_Abierta_Cerrada = ref(null)
 const P_Metraje_obtenido = ref('')
 const F_Metraje = ref(null)
 const bandera = ref(true)
+const directorioTerminal = '../terminal_fotos'
+const directorioMetraje = '../metrajes_fotos'
 
 function OnSubmit(){
     Revision()

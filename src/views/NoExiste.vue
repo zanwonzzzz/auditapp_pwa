@@ -28,6 +28,7 @@ const lat_auditor = ref("")
 const lon_auditor = ref("")
 const P_Observaciones_Finales = ref("")
 const Evidencia_Instalacion = ref(null)
+const directorioNoInst = '../no_instalacion_fotos'
 
 function useGeolocation() {
   if (!navigator.geolocation) {
