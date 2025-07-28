@@ -28,7 +28,7 @@ function Fecha_inicio()
     const ss = String(now.getSeconds()).padStart(2, '0')
     fecha_inicio.value = `${yyyy}-${mm}-${dd} ${hh}:${min}:${ss}`
 
-    const fecha_inicio = apiService.Inserts(foliopisa,{"Fecha_Inicio":fecha_Traslado.value,"Fin_Traslado":fecha_Traslado.value})
+    const inicio = apiService.Inserts(foliopisa,{"Fecha_Inicio":fecha_inicio.value,"Fin_Traslado":fecha_inicio.value})
 
 }
 

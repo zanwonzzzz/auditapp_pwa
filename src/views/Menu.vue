@@ -112,5 +112,9 @@ library.add(faSuitcase, faPowerOff, faUserGear);
 
 const router = useRouter()
 
-function logout(){router.back()}
+function logout(){
+  localStorage.removeItem('token')
+  console.log('Token eliminado, redirigiendo al login')
+  router.push('/')
+}
 </script>

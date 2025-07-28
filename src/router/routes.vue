@@ -88,6 +88,31 @@ const router = createRouter({
   routes,
 });
 
+router.beforeEach((to, from, next) => {
+  const publicRoutes = ['/']
+  
+  const token = localStorage.getItem('token')
+  const hasValidToken = token && token !== '' && token !== 'null' && token !== 'undefined'
+  
+  if (to.path === '/' && hasValidToken) {
+    console.log('Usuario ya autenticado, redirigiendo al menú')
+    next('/menu')
+    return
+  }
+  
+  if (publicRoutes.includes(to.path)) {
+    next()
+    return
+  }
+  
+  if (!hasValidToken) {
+    console.log('No hay token válido, redirigiendo al login')
+    next('/')
+    return
+  }
+  next()
+})
+
 export default router
 
 </script>

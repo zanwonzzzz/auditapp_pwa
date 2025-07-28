@@ -28,7 +28,10 @@ library.add(faArrowLeft, faPowerOff);
 const router = useRouter();
 const username = ref();
 function regresar() { router.back(); }
-function logout() { router.push('/'); }
+function logout() {
+  localStorage.removeItem('token')
+  router.push('/'); 
+}
 
 onMounted(async () => {
   const nombre_Auditor = await authService.getUserAuditor();
