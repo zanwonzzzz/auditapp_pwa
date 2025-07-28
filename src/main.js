@@ -9,9 +9,12 @@ import Vue3Geolocation from 'vue3-geolocation'
 import firebaseApp from './firebase'
 import ToastPlugin from 'vue-toast-notification';
 import 'vue-toast-notification/dist/theme-bootstrap.css';
+import JsonExcel from "vue-json-excel3";
+
 
 const app = createApp(App)
 app.component('font-awesome-icon',FontAwesomeIcon)
+app.component("DownloadExcel", JsonExcel);
 app.use(router)
 app.use(Vue3Geolocation)
 app.use(ToastPlugin)

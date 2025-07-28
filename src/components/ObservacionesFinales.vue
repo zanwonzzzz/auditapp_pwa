@@ -30,7 +30,7 @@ onMounted(() => {
 function AuditoriaCompletada()
 {
     
-        apiService.Inserts(foliopisa,{"Estatus_Auditoria":"COMPLETADA"})
+        apiService.Inserts(foliopisa,{"Estatus_Auditoria":"COMPLETADA","P_Observaciones_Finales":P_Observaciones_Finales.value})
         $toast.success('Auditoria Finalizada')
         router.push('/ordenes')
     

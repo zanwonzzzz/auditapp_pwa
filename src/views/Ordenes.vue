@@ -34,6 +34,19 @@
       </div>
     </div>
     <div class="main-bg">
+      <div class="excel-container">
+        <DownloadExcel
+          :data="json_data"
+          :fields="json_fields"
+          worksheet="Ordenes Pendientes"
+          name="pendientes.xls"
+        >
+          <button class="excel-btn">
+            <font-awesome-icon :icon="['fas', 'file-excel']" />
+            Excel
+          </button>
+        </DownloadExcel>
+      </div>
       <div class="ordenes-grid">
         <div v-for="(d,index) in ordenes" :key="d[0]" class="orden-card" v-show="(pag - 1) * NUM_RESULTS <= index  && pag * NUM_RESULTS > index">
           <div class="orden-header">
@@ -77,12 +90,14 @@ body, html {
 
 .main-bg {
   min-height: 100vh;
-  width: 100vw;
+  width: 100%;
   background: #fff;
   display: flex;
-  align-items: flex-start;
-  justify-content: center;
+  flex-direction: column;
+  align-items: center;
+  padding: 20px;
   padding-top: 0;
+  box-sizing: border-box;
 }
 
 .selects-container {
@@ -159,7 +174,7 @@ body, html {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
   gap: 32px;
-  width: 90vw;
+  width: 100%;
   max-width: 1200px;
 }
 
@@ -253,6 +268,7 @@ body, html {
 
 @media (max-width: 600px) {
   .main-bg {
+    padding: 10px;
     padding-top: 0;
   }
   .selects-container {
@@ -287,12 +303,59 @@ body, html {
   }
   .ordenes-grid {
     gap: 16px;
-    width: 95vw;
+    width: 100%;
   }
   .orden-card {
     padding: 16px 8px;
     min-height: 140px;
   }
+  
+  .excel-container {
+    margin-bottom: 15px;
+  }
+  
+  .excel-btn {
+    padding: 6px 10px;
+    font-size: 0.8rem;
+    min-width: 100px;
+  }
+  
+  .excel-btn svg {
+    font-size: 0.8rem;
+  }
+}
+
+.excel-container {
+  display: flex;
+  justify-content: center;
+  width: 100%;
+  margin-bottom: 20px;
+}
+
+.excel-btn {
+  background: #217346;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  padding: 8px 12px;
+  font-size: 0.85rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.2s;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  width: auto;
+  min-width: 120px;
+  justify-content: center;
+}
+
+.excel-btn:hover {
+  background: #1e5f3d;
+}
+
+.excel-btn svg {
+  font-size: 0.9rem;
 }
 </style>
 <script setup>
@@ -304,12 +367,11 @@ import { ref } from 'vue'
 import navbar from '../components/navbar.vue'
 import authService from '../api/authService'
 import { useRequest } from 'vue-request';
-
 // Font Awesome
 import { library } from '@fortawesome/fontawesome-svg-core'
-import { faBinoculars, faPlay, faSearch } from '@fortawesome/free-solid-svg-icons'
+import { faBinoculars, faPlay, faSearch, faFileExcel } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
-library.add(faBinoculars, faPlay, faSearch)
+library.add(faBinoculars, faPlay, faSearch, faFileExcel)
 
 const router = useRouter()
 const ordenes = ref([]) 
@@ -320,7 +382,17 @@ const pag = ref(1)
 let foliopisa = null
 const copeseleccionado = ref("")
 const data_distritos = ref([])
-let tamañoAnterior = 0 
+let tamañoAnterior = 0
+
+const json_data = ref([])
+const json_fields = {
+  'Folio Pisa': 'folio',
+  'Distrito': 'distrito',
+  'Terminal': 'terminal',
+  'Puerto': 'puerto',
+  'Dirección': 'direccion',
+  'Observaciones': 'observaciones'
+} 
 //CONSULTAR LAS ORDENES SOLO UNA BES Y GUARDARLAS EN CACHE Y Q SOLO CON EL POLLINGSE ACTUALISE
   onMounted(async () => {
      const copes = await apiService.Copes()
@@ -332,7 +404,8 @@ let tamañoAnterior = 0
          pollingInterval: 50000,
          onSuccess: (response) => {
            const tamañoActual = response.data.Ordenes_Pendientes
-
+             console.log(tamañoActual)
+             console.log(tamañoAnterior)
            if (tamañoActual > tamañoAnterior) {
              console.log("¡Nuevas órdenes detectadas!");
              enviarNotificacionNuevasOrdenes();
@@ -343,6 +416,8 @@ let tamañoAnterior = 0
            ordenes.value = response.data.Ordenes_Pendientes
            data_original.value = response.data.Ordenes_Pendientes
            
+           
+           prepararDatosExcel(response.data.Ordenes_Pendientes)
          }
        }
      )
@@ -400,6 +475,19 @@ let tamañoAnterior = 0
       })
       ordenes.value = filtradota
     }
+
+    function prepararDatosExcel(ordenesData) {
+      json_data.value = ordenesData.map(orden => ({
+        folio: orden[0],
+        distrito: orden[3],
+        terminal: orden[1],
+        puerto: orden[2],
+        direccion: orden[5] || '',
+        observaciones: orden[11] || ''
+      }))
+    }
+
+
     
 
 

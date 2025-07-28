@@ -15,7 +15,7 @@
                     <option value="COBRE">COBRE</option>
                 </select>
             </div>
-
+            
             <div class="form-group">
                 <label for="Coincide_Instalacion">SELECCIONA TIPO DE INSTALACIÓN</label>
                 <select name="Coincide_Instalacion" id="Coincide_Instalacion" v-model="Coincide_Instalacion" class="form-select" required>
@@ -62,6 +62,7 @@ import { useRouter,useRoute } from 'vue-router';
 import { ref } from 'vue';
 import navbar from '../components/navbar.vue';
 import { RouterView } from 'vue-router';
+import { WebCam } from "vue-web-cam";
 
 const route = useRoute()
 const router = useRouter()

@@ -89,12 +89,12 @@ function finalizarAuditoria() {
   if (presenciaCliente.value && presenciaCliente.value !== '' && presenciaCliente.value !== null && presenciaCliente.value !== undefined) {
     if (presenciaCliente.value === 'SI') {
       Estatus_Auditoria.value = 'COMPLETADA'
-      apiService.Inserts(foliopisa,{"Estatus_Auditoria":Estatus_Auditoria.value})
+      apiService.Inserts(foliopisa,{"Estatus_Auditoria":Estatus_Auditoria.value,"P_Observaciones_Finales":P_Observaciones_Finales.value})
       $toast.success('Auditoría finalizada correctamente');
       router.push('/ordenes')
     } else if (presenciaCliente.value === 'NO') {
       Estatus_Auditoria.value = 'PARCIAL'
-      apiService.Inserts(foliopisa,{"Estatus_Auditoria":Estatus_Auditoria.value})
+      apiService.Inserts(foliopisa,{"Estatus_Auditoria":Estatus_Auditoria.value,"P_Observaciones_Finales":P_Observaciones_Finales.value})
       $toast.success('Auditoría parcial registrada correctamente');
       router.push('/ordenes')
     }
