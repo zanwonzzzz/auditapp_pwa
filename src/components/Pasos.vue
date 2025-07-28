@@ -9,6 +9,28 @@
 
 <script setup>
 import { useRouter,useRoute } from 'vue-router';
+import apiService from '../api/apiService';
+import { onMounted,ref } from 'vue';
+
+const fecha_inicio = ref("")
+onMounted(() => {
+  Fecha_inicio()
+})
+
+function Fecha_inicio()
+{
+    const now = new Date()
+    const yyyy = now.getFullYear()
+    const mm = String(now.getMonth() + 1).padStart(2, '0')
+    const dd = String(now.getDate()).padStart(2, '0')
+    const hh = String(now.getHours()).padStart(2, '0')
+    const min = String(now.getMinutes()).padStart(2, '0')
+    const ss = String(now.getSeconds()).padStart(2, '0')
+    fecha_inicio.value = `${yyyy}-${mm}-${dd} ${hh}:${min}:${ss}`
+
+    const fecha_inicio = apiService.Inserts(foliopisa,{"Fecha_Inicio":fecha_Traslado.value,"Fin_Traslado":fecha_Traslado.value})
+
+}
 
 const router = useRouter()
 const route = useRoute()

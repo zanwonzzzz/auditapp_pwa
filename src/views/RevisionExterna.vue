@@ -83,11 +83,36 @@ function OnSubmit(){
 }
 function onFileChangeTerminal(e) {
   const file = e.target.files[0]
-  F_Terminal_Abierta_Cerrada.value = file || null
+  if (file) {
+    const extension = file.name.split('.').pop()
+    const nuevoNombre = `${directorioTerminal}/${foliopisa}.${extension}`
+    
+    const fileRenombrado = new File([file], nuevoNombre, {
+      type: file.type,
+      lastModified: file.lastModified
+    })
+    
+    F_Terminal_Abierta_Cerrada.value = fileRenombrado
+  } else {
+    F_Terminal_Abierta_Cerrada.value = null
+  }
 }
+
 function onFileChangeMetraje(e) {
   const file = e.target.files[0]
-  F_Metraje.value = file || null
+  if (file) {
+    const extension = file.name.split('.').pop()
+    const nuevoNombre = `${directorioMetraje}/${foliopisa}.${extension}`
+    
+    const fileRenombrado = new File([file], nuevoNombre, {
+      type: file.type,
+      lastModified: file.lastModified
+    })
+    
+    F_Metraje.value = fileRenombrado
+  } else {
+    F_Metraje.value = null
+  }
 }
 function Revision()
 {

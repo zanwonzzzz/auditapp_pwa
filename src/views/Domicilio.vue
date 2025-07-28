@@ -87,7 +87,19 @@ onMounted(() => {
 
 function onFileChange(e) {
   const file = e.target.files[0]
-  Foto_Domicilio.value = file || null
+  if (file) {
+    const extension = file.name.split('.').pop()
+    const nuevoNombre = `${directorioDomicilio}/${foliopisa}.${extension}`
+    
+    const fileRenombrado = new File([file], nuevoNombre, {
+      type: file.type,
+      lastModified: file.lastModified
+    })
+    
+    Foto_Domicilio.value = fileRenombrado
+  } else {
+    Foto_Domicilio.value = null
+  }
 }
 
 function Domicilio() {

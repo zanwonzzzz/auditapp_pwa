@@ -105,6 +105,9 @@ html, body, #app {
 import { ref } from 'vue';
 import axios from 'axios';
 import { useRouter } from 'vue-router';
+import firebase from '../firebase';
+import apiService from '../api/apiService';
+
 
 const usuario = ref('');
 const router = useRouter();
@@ -113,11 +116,20 @@ function OnSubmit() {
   axios.post('http://127.0.0.1:8000/login', {
     user: usuario.value,
   })
-  .then(function (response) {
+  .then(async function (response) {
     console.log(response);
     localStorage.setItem('token',response.data.token)
-    
-    router.push('/menu');
+     const id = response.data.user.idAuditor;
+     
+     try {
+       const tokenFCM = await firebase.getToken(firebase.messaging, { vapidKey: "BNxkWARucG0mAtN6oVpQQoG8qv9AKulsRY_qUnC_FiScPCnxZVQ6_A4s1BoglTHhe3FZZL7YcPm0fOJkiUPBvdE" });
+       console.log('Token FCM:', tokenFCM);
+       await apiService.TokenFCM(id,{"token": tokenFCM});
+       router.push('/menu');
+     } catch (error) {
+       console.error('Error obteniendo token FCM:', error);
+       //router.push('/menu');
+     }
   })
   .catch(function (error) {
     console.log(error);

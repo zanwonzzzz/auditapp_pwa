@@ -20,16 +20,16 @@
 
             <button
               class="btn btn-success btn-block"
-              :disabled="!presenciaCliente"
-              :title="!presenciaCliente ? 'Debe registrar la presencia del cliente antes de finalizar la auditoría' : ''"
+              :disabled="!tienePresenciaClienteValida"
+              :title="!tienePresenciaClienteValida ? 'Debe registrar la presencia del cliente antes de finalizar la auditoría' : ''"
               @click="finalizarAuditoria"
             >
               Finalizar Auditoría
             </button>
             <button
               class="btn btn-success btn-block"
-              :disabled="presenciaCliente == 'SI' || presenciaCliente == 'NO'"
-              :title="presenciaCliente ? 'Ya se registró presencia del cliente' : ''"
+              :disabled="tienePresenciaClienteValida"
+              :title="tienePresenciaClienteValida ? 'Ya se registró presencia del cliente' : ''"
             >
               Auditoría En Domicilio
             </button>
@@ -40,7 +40,7 @@
 <script setup>
 import apiService from '../api/apiService';
 import { useRoute,useRouter } from 'vue-router';
-import { ref,onMounted } from 'vue';
+import { ref, onMounted, computed } from 'vue';
 import { defineEmits } from 'vue';
 import navbar from './navbar.vue';
 import {useToast} from 'vue-toast-notification';
@@ -56,30 +56,51 @@ const P_Observaciones_Finales = ref('')
 const presenciaCliente = ref('')
 const Estatus_Auditoria = ref('')
 
+const tienePresenciaClienteValida = computed(() => {
+  const valor = presenciaCliente.value
+  console.log('Verificando presencia cliente:', valor, 'Tipo:', typeof valor)
+  
+  return valor === 'SI' || valor === 'NO'
+})
+
 function Observaciones(){apiService.Inserts(foliopisa,{"P_Observaciones_Finales":P_Observaciones_Finales.value})
 router.push(`/domicilio/${foliopisa}`)   }
 function Nav(ruta){router.push(`${ruta}/${foliopisa}`)}
 
-onMounted(() => {
-    presenciaCliente.value = apiService.Valores(foliopisa,"P_Cliente")
-    finalizarAuditoria()
+onMounted(async () => {
+    try {
+        const valor = await apiService.Valores(foliopisa,"P_Cliente")
+        presenciaCliente.value = valor
+        console.log('Presencia cliente cargada:', presenciaCliente.value, 'Tipo:', typeof valor, 'Longitud:', valor ? valor.length : 0)
+        console.log('¿Es string vacío?', valor === '')
+        console.log('¿Es null?', valor === null)
+        console.log('¿Es undefined?', valor === undefined)
+        console.log('¿Es falsy?', !valor)
+    } catch (error) {
+        console.error('Error cargando presencia cliente:', error)
+        presenciaCliente.value = ''
+    }
 })
 
 
 function finalizarAuditoria() {
-  if (!(presenciaCliente.value !== '' && presenciaCliente.value !== null && presenciaCliente.value !== undefined)){
-  if (presenciaCliente.value === 'SI') {
-    Estatus_Auditoria.value = 'COMPLETADA'
-    apiService.Inserts(foliopisa,{"Estatus_Auditoria":Estatus_Auditoria.value})
-    $toast.success('Auditoría finalizada correctamente');
-    router.push('/ordenes')
+  console.log('Valor de presenciaCliente:', presenciaCliente.value, 'Tipo:', typeof presenciaCliente.value)
+  
+  if (presenciaCliente.value && presenciaCliente.value !== '' && presenciaCliente.value !== null && presenciaCliente.value !== undefined) {
+    if (presenciaCliente.value === 'SI') {
+      Estatus_Auditoria.value = 'COMPLETADA'
+      apiService.Inserts(foliopisa,{"Estatus_Auditoria":Estatus_Auditoria.value})
+      $toast.success('Auditoría finalizada correctamente');
+      router.push('/ordenes')
+    } else if (presenciaCliente.value === 'NO') {
+      Estatus_Auditoria.value = 'PARCIAL'
+      apiService.Inserts(foliopisa,{"Estatus_Auditoria":Estatus_Auditoria.value})
+      $toast.success('Auditoría parcial registrada correctamente');
+      router.push('/ordenes')
+    }
   } else {
-    Estatus_Auditoria.value = 'PARCIAL'
-    apiService.Inserts(foliopisa,{"Estatus_Auditoria":Estatus_Auditoria.value})
-    $toast.success('Auditoría parcial registrada correctamente');
-    router.push('/ordenes')
+    $toast.error('Debe registrar la presencia del cliente antes de finalizar la auditoría');
   }
-}
 }
 
 </script>

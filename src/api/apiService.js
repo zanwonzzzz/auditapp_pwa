@@ -39,7 +39,10 @@ class apiService
     Validarfolio(folio_pisa){return http.get(`/validar/folio/${folio_pisa}`)}
 
     Auditoria(folio_pisa,data){return http.post(`/nueva/auditoria/${folio_pisa}`,data)}
+
+    TokenFCM(idAuditor,data){return http.put(`/token/${idAuditor}`,data)}
      
+    getTokenFCM(idAuditor){return http.put(`/token/fcm/${idAuditor}`)}
 }
 //estaba devolviendo la clase como tal y no una instancia
 export default new apiService();

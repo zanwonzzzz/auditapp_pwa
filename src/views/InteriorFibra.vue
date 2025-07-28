@@ -61,11 +61,36 @@ function InstalacionRoseta()
 
 function onFileChangeModem(e) {
   const file = e.target.files[0]
-  fotoModem.value = file || null
+  if (file) {
+    const extension = file.name.split('.').pop()
+    const nuevoNombre = `${directorioModem}/${foliopisa}.${extension}`
+    
+    const fileRenombrado = new File([file], nuevoNombre, {
+      type: file.type,
+      lastModified: file.lastModified
+    })
+    
+    fotoModem.value = fileRenombrado
+  } else {
+    fotoModem.value = null
+  }
 }
+
 function onFileChangeRoseta(e) {
   const file = e.target.files[0]
-  fotoRoseta.value = file || null
+  if (file) {
+    const extension = file.name.split('.').pop()
+    const nuevoNombre = `${directorioRoseta}/${foliopisa}.${extension}`
+    
+    const fileRenombrado = new File([file], nuevoNombre, {
+      type: file.type,
+      lastModified: file.lastModified
+    })
+    
+    fotoRoseta.value = fileRenombrado
+  } else {
+    fotoRoseta.value = null
+  }
 }
 </script>
 <style scoped>

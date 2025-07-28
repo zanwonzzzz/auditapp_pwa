@@ -35,7 +35,7 @@
     </div>
     <div class="main-bg">
       <div class="ordenes-grid">
-        <div v-for="(d,index) in data" :key="d[0]" class="orden-card" v-show="(pag - 1) * NUM_RESULTS <= index  && pag * NUM_RESULTS > index">
+        <div v-for="(d,index) in ordenes" :key="d[0]" class="orden-card" v-show="(pag - 1) * NUM_RESULTS <= index  && pag * NUM_RESULTS > index">
           <div class="orden-header">
             <span class="orden-label">Folio Pisa {{ d[0] }}</span>
             <span class="orden-label">Distrito  {{ d[3] }}</span>
@@ -60,7 +60,7 @@
                     </a>
                 </li>
                 <li>
-                    <a href="#" aria-label="Next" v-show="pag * NUM_RESULTS < data.length" @click.prevent="pag++">
+                    <a href="#" aria-label="Next" v-show="pag * NUM_RESULTS < ordenes.length" @click.prevent="pag++">
                         <span aria-hidden="true">Siguiente</span>
                     </a>
                 </li>
@@ -303,6 +303,7 @@ import { onMounted } from 'vue'
 import { ref } from 'vue'
 import navbar from '../components/navbar.vue'
 import authService from '../api/authService'
+import { useRequest } from 'vue-request';
 
 // Font Awesome
 import { library } from '@fortawesome/fontawesome-svg-core'
@@ -311,7 +312,7 @@ import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
 library.add(faBinoculars, faPlay, faSearch)
 
 const router = useRouter()
-const data = ref([]) 
+const ordenes = ref([]) 
 const data_copes= ref([])
 const data_original = ref([])
 const NUM_RESULTS = 5
@@ -319,16 +320,45 @@ const pag = ref(1)
 let foliopisa = null
 const copeseleccionado = ref("")
 const data_distritos = ref([])
-
+let tamañoAnterior = 0 
 //CONSULTAR LAS ORDENES SOLO UNA BES Y GUARDARLAS EN CACHE Y Q SOLO CON EL POLLINGSE ACTUALISE
   onMounted(async () => {
      const copes = await apiService.Copes()
       const idAuditor = await authService.getIdAuditor()
-     const ordenes = await apiService.ordenesPendientes(idAuditor)
-     data.value = ordenes.data.Ordenes_Pendientes
-     data_original.value = ordenes.data.Ordenes_Pendientes
+     
+     const { data, loading } = useRequest(
+       () => apiService.ordenesPendientes(idAuditor), 
+       { 
+         pollingInterval: 50000,
+         onSuccess: (response) => {
+           const tamañoActual = response.data.Ordenes_Pendientes
+
+           if (tamañoActual > tamañoAnterior) {
+             console.log("¡Nuevas órdenes detectadas!");
+             enviarNotificacionNuevasOrdenes();
+           }
+
+           tamañoAnterior = tamañoActual
+           
+           ordenes.value = response.data.Ordenes_Pendientes
+           data_original.value = response.data.Ordenes_Pendientes
+           
+         }
+       }
+     )
+     
      data_copes.value = copes.data.Copes
     })
+
+    function enviarNotificacionNuevasOrdenes() {
+      if ('Notification' in window && Notification.permission === 'granted') {
+        new Notification('Nuevas Órdenes', {
+          body: `Tienes nueva(s) orden(es) pendiente(s)`,
+          icon: '/auditap.png',
+          badge: '/auditap.png'
+        });
+      }
+    }
 
     async function Distritos()
     {
@@ -356,7 +386,7 @@ const data_distritos = ref([])
     const Buscar = (e) => {
       const searchTerm = e.target.value.toLowerCase()
       if(searchTerm === '') {
-        data.value = data_original.value
+        ordenes.value = data_original.value
         return
       }
       
@@ -368,7 +398,7 @@ const data_distritos = ref([])
         
         return foliopisa || distrito || terminal || puerto
       })
-      data.value = filtradota
+      ordenes.value = filtradota
     }
     
 

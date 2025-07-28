@@ -5,54 +5,54 @@
     <div class="form-bg">
       <form class="audit-form" @submit.prevent="OnSubmit">
         <label>¿COLOCO SUJETADOR?</label>
-        <select name="P_Sujetador" id="P_Sujetador" @change="LedsVerdes" v-model="P_Sujetador" required>
+        <select name="P_Sujetador" id="P_Sujetador" @change="toggleSujetador" v-model="P_Sujetador" required>
           <option value="">SELECCIONA LA RESPUESTA</option>
           <option value="SI">SI</option>
           <option value="NO">NO</option>
         </select>
     
-        <label for="txtFotoSujetador" v-if="bandera">FOTO: SUJETADOR</label>
-        <input type="file" accept="image/*" v-if="bandera" @change="onFileChangeModem">
+        <label for="txtFotoSujetador" v-if="banderaSujetador">FOTO: SUJETADOR</label>
+        <input type="file" accept="image/*" v-if="banderaSujetador" @change="onFileChangeSujetador">
     
         <label>¿SE INSTALO ROSETA GRIS PARA DATOS?</label>
-        <select name="P_Roseta" id="P_Roseta" @change="InstalacionRoseta" v-model="valorInstalacionRoseta" required>
+        <select name="P_Roseta" id="P_Roseta" @change="toggleRoseta" v-model="P_Roseta" required>
           <option value="">SELECCIONA LA RESPUESTA</option>
           <option value="SI">SI</option>
           <option value="NO">NO</option>
         </select>
     
-        <label v-if="bandera2">FOTO: ROSETA GRIS</label>
-        <input type="file" accept="image/*" v-if="bandera2" @change="onFileChangeRoseta">
+        <label v-if="banderaRoseta">FOTO: ROSETA GRIS</label>
+        <input type="file" accept="image/*" v-if="banderaRoseta" @change="onFileChangeRoseta">
     
         <label>¿LA ROSETA SE ENCUENTRA FIJA Y CON EL CONECTOR HACIA ABAJO?</label>
-        <select name="P_Roseta_Conector" id="P_Roseta_Conector" @change="InstalacionRoseta" v-model="valorInstalacionRoseta" required>
+        <select name="P_Roseta_Conector" id="P_Roseta_Conector" @change="toggleRosetaConector" v-model="P_Roseta_Conector" required>
           <option value="">SELECCIONA LA RESPUESTA</option>
           <option value="SI">SI</option>
           <option value="NO">NO</option>
         </select>
     
-        <label v-if="bandera2">FOTO: ROSETA FIJA</label>
-        <input type="file" accept="image/*" v-if="bandera2" @change="onFileChangeRoseta">
+        <label v-if="banderaRosetaConector">FOTO: ROSETA FIJA</label>
+        <input type="file" accept="image/*" v-if="banderaRosetaConector" @change="onFileChangeRosetaConector">
 
         <label>¿SE INSTALO Y CONECTO CORRECTAMENTE EL DIT CON SPLITTER?</label>
-        <select name="P_DIT" id="P_DIT" @change="InstalacionRoseta" v-model="valorInstalacionRoseta" required>
+        <select name="P_DIT" id="P_DIT" @change="toggleDIT" v-model="P_DIT" required>
           <option value="">SELECCIONA LA RESPUESTA</option>
           <option value="SI">SI</option>
           <option value="NO">NO</option>
         </select>
     
-        <label v-if="bandera2">FOTO: DIT</label>
-        <input type="file" accept="image/*" v-if="bandera2" @change="onFileChangeRoseta">
+        <label v-if="banderaDIT">FOTO: DIT</label>
+        <input type="file" accept="image/*" v-if="banderaDIT" @change="onFileChangeDIT">
     
         <label>¿SE INSTALO CORDON INTERIOR GRIS?</label>
-        <select name="P_CordonInt_Gris" id="P_CordonInt_Gris" @change="InstalacionRoseta" v-model="valorInstalacionRoseta" required>
+        <select name="P_CordonInt_Gris" id="P_CordonInt_Gris" @change="toggleCordonGris" v-model="P_CordonInt_Gris" required>
           <option value="">SELECCIONA LA RESPUESTA</option>
           <option value="SI">SI</option>
           <option value="NO">NO</option>
         </select>
     
-        <label v-if="bandera2">FOTO: CORDON INTERIOR GRIS</label>
-        <input type="file" accept="image/*" v-if="bandera2" @change="onFileChangeRoseta">
+        <label v-if="banderaCordonGris">FOTO: CORDON INTERIOR GRIS</label>
+        <input type="file" accept="image/*" v-if="banderaCordonGris" @change="onFileChangeCordonGris">
         
         <button type="submit">Avanzar</button>
       </form>
@@ -64,38 +64,157 @@
     import apiService from '../api/apiService';
     import { useRoute,useRouter } from 'vue-router';
     
-    const bandera = ref(false)
-    const bandera2 = ref(false)
-    const valorLedsVerdes = ref('')
-    const valorInstalacionRoseta = ref('')
-    const fotoModem = ref(null)
+    const banderaSujetador = ref(false)
+    const banderaRoseta = ref(false)
+    const banderaRosetaConector = ref(false)
+    const banderaDIT = ref(false)
+    const banderaCordonGris = ref(false)
+    
+    const P_Sujetador = ref('')
+    const P_Roseta = ref('')
+    const P_Roseta_Conector = ref('')
+    const P_DIT = ref('')
+    const P_CordonInt_Gris = ref('')
+    
+    const fotoSujetador = ref(null)
     const fotoRoseta = ref(null)
+    const fotoRosetaConector = ref(null)
+    const fotoDIT = ref(null)
+    const fotoCordonGris = ref(null)
+    
     const foliopisa = useRoute().params.foliopisa
     const router = useRouter()
-    const directorioModem = '../modem_funcionando_fotos'
+    
+    const directorioSujetador = '../sujetador_interior_fotos'
     const directorioRoseta = '../roseta_fotos'
+    const directorioRosetaConector = '../roseta_conector_fotos'
+    const directorioDIT = '../fdit_fotos'
+    const directorioCordonGris = '../cordon_interior_gris_fotos'
     function OnSubmit()
     {
-        apiService.Inserts(foliopisa,{"F_ModemFuncionando":fotoModem.value,"P_ModemFuncionando":valorLedsVerdes.value,"F_Roseta":fotoRoseta.value,"P_Roseta":valorInstalacionRoseta.value})
+        apiService.Inserts(foliopisa,{
+            "F_Sujetador": fotoSujetador.value ? fotoSujetador.value.name : '',
+            "P_Sujetador": P_Sujetador.value,
+            "F_Roseta": fotoRoseta.value ? fotoRoseta.value.name : '',
+            "P_Roseta": P_Roseta.value,
+            "F_Roseta_Conector": fotoRosetaConector.value ? fotoRosetaConector.value.name : '',
+            "P_Roseta_Conector": P_Roseta_Conector.value,
+            "F_DIT": fotoDIT.value ? fotoDIT.value.name : '',
+            "P_DIT": P_DIT.value,
+            "F_CordonInt_Gris": fotoCordonGris.value ? fotoCordonGris.value.name : '',
+            "P_CordonInt_Gris": P_CordonInt_Gris.value
+        })
         router.push(`/observaciones/finales/${foliopisa}`)
     }
     
-    function LedsVerdes()
+    function toggleSujetador()
     {
-        bandera.value = valorLedsVerdes.value == 'NO'
-    }
-    function InstalacionRoseta()
-    {
-        bandera2.value = valorInstalacionRoseta.value == 'NO'
+        banderaSujetador.value = P_Sujetador.value === 'NO'
     }
     
-    function onFileChangeModem(e) {
-      const file = e.target.files[0]
-      fotoModem.value = file || null
+    function toggleRoseta()
+    {
+        banderaRoseta.value = P_Roseta.value === 'NO'
     }
+    
+    function toggleRosetaConector()
+    {
+        banderaRosetaConector.value = P_Roseta_Conector.value === 'NO'
+    }
+    
+    function toggleDIT()
+    {
+        banderaDIT.value = P_DIT.value === 'NO'
+    }
+    
+    function toggleCordonGris()
+    {
+        banderaCordonGris.value = P_CordonInt_Gris.value === 'NO'
+    }
+    
+    function onFileChangeSujetador(e) {
+      const file = e.target.files[0]
+      if (file) {
+        const extension = file.name.split('.').pop()
+        const nuevoNombre = `${directorioSujetador}/${foliopisa}.${extension}`
+        
+        const fileRenombrado = new File([file], nuevoNombre, {
+          type: file.type,
+          lastModified: file.lastModified
+        })
+        
+        fotoSujetador.value = fileRenombrado
+      } else {
+        fotoSujetador.value = null
+      }
+    }
+
     function onFileChangeRoseta(e) {
       const file = e.target.files[0]
-      fotoRoseta.value = file || null
+      if (file) {
+        const extension = file.name.split('.').pop()
+        const nuevoNombre = `${directorioRoseta}/${foliopisa}.${extension}`
+        
+        const fileRenombrado = new File([file], nuevoNombre, {
+          type: file.type,
+          lastModified: file.lastModified
+        })
+        
+        fotoRoseta.value = fileRenombrado
+      } else {
+        fotoRoseta.value = null
+      }
+    }
+
+    function onFileChangeRosetaConector(e) {
+      const file = e.target.files[0]
+      if (file) {
+        const extension = file.name.split('.').pop()
+        const nuevoNombre = `${directorioRosetaConector}/${foliopisa}.${extension}`
+        
+        const fileRenombrado = new File([file], nuevoNombre, {
+          type: file.type,
+          lastModified: file.lastModified
+        })
+        
+        fotoRosetaConector.value = fileRenombrado
+      } else {
+        fotoRosetaConector.value = null
+      }
+    }
+
+    function onFileChangeDIT(e) {
+      const file = e.target.files[0]
+      if (file) {
+        const extension = file.name.split('.').pop()
+        const nuevoNombre = `${directorioDIT}/${foliopisa}.${extension}`
+        
+        const fileRenombrado = new File([file], nuevoNombre, {
+          type: file.type,
+          lastModified: file.lastModified
+        })
+        
+        fotoDIT.value = fileRenombrado
+      } else {
+        fotoDIT.value = null
+      }
+    }
+
+    function onFileChangeCordonGris(e) {
+      const file = e.target.files[0]
+      if (file) {
+        const extension = file.name.split('.').pop()
+        const nuevoNombre = `${directorioCordonGris}/${foliopisa}.${extension}`
+        
+        const fileRenombrado = new File([file], nuevoNombre, {
+          type: file.type,
+          lastModified: file.lastModified
+        })
+        
+        fotoCordonGris.value = fileRenombrado
+      } else {
+        fotoCordonGris.value = null
+      }
     }
     </script>
     <style scoped>

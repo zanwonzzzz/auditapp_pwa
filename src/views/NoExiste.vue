@@ -7,7 +7,7 @@
 <label for="">LATITUD</label>
 <input type="text" name='lat_auditor' v-model="lat_auditor">
 <label for="">LONGITUD</label>
-<input type="text" name='lat_auditor' v-model="lat_auditor">
+<input type="text" name='lon_auditor' v-model="lon_auditor">
 <label for="">COMENTARIOS</label>
 <input type="text" name='P_Observaciones_Finales' v-model="P_Observaciones_Finales" required>
 <button type="submit">Avanzar</button>
@@ -53,7 +53,19 @@ onMounted(() => {
 
 function onFileChange(e) {
   const file = e.target.files[0]
-  Evidencia_Instalacion.value = file || null
+  if (file) {
+    const extension = file.name.split('.').pop()
+    const nuevoNombre = `${directorioNoInst}/${foliopisa}.${extension}`
+    
+    const fileRenombrado = new File([file], nuevoNombre, {
+      type: file.type,
+      lastModified: file.lastModified
+    })
+    
+    Evidencia_Instalacion.value = fileRenombrado
+  } else {
+    Evidencia_Instalacion.value = null
+  }
 }
 
 function OnSubmit()
