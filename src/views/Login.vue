@@ -128,7 +128,7 @@ function OnSubmit() {
        router.push('/menu');
      } catch (error) {
        console.error('Error obteniendo token FCM:', error);
-       //router.push('/menu');
+       router.push('/menu');
      }
   })
   .catch(function (error) {

@@ -5,7 +5,7 @@
       <label for="txtObservacionesFinales">OBSERVACIONES FINALES</label>
       <textarea name="P_Observaciones_Finales" id="P_Observaciones_Finales" v-model="P_Observaciones_Finales"></textarea>
       <button type="submit">Finalizar Auditoria</button>
-      <button type="button"  @click="revision" :disabled="FotoTerminal == '' || FotoTerminal == null || FotoTerminal == undefined">Revision Externa</button>
+      <button type="button"  @click="revision" :disabled="!(FotoTerminal == '' || FotoTerminal == null || FotoTerminal == undefined)">Revision Externa</button>
     </form>
   </div>
 </template>
